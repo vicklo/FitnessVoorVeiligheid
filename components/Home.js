@@ -4,12 +4,16 @@ import { DataTable, Button, withTheme } from 'react-native-paper';
 import { debug, round, set } from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
 
-  export default class profile extends Component {
+  export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
         isloading:false,
     };
+  }
+  componentDidMount =  async() => 
+  {
+      
   }
 
   render() {
@@ -24,7 +28,7 @@ import { ScrollView } from 'react-native-gesture-handler';
     );
     else
         return(
-            <ScrollView>
+            <ScrollView >
                 
             </ScrollView>
         );
