@@ -67,56 +67,14 @@ export default class profile extends Component {
   }
   componentDidMount =  async() => 
   {  
-    let listusers = new Array();
-    const users =  await fetch('http://localhost:3000/users');
-
-    users.forEach(element => {
-        let _user = new userstudent;
-        _user.userid = element.userid;
-        _user.userfoto = "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80";
-        _user.username = element.username;
-        _user.wachtwoord = element.wachtwoord;
-        _user.studentmail = element.userid;
-        _user.lengte = element.lengte;
-        _user.gewicht = element.gewicht;
-        _user.vetpercentage = element.vetpercentage;
-        _user.klasid = element.klasid;
-        alert(element.username)
-        listusers.push(element);
-    });
-
-
-
-
-
-    for(i = 5;i>1;i--)
-    {
-      let _user = new userstudent;
-      _user.userid = i;
-      _user.userfoto = "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80";
-      _user.username = "Vicklo";
-      _user.wachtwoord = "Pwd123";
-      _user.studentmail = "vic.kloeppel@gmail.com";
-      _user.lengte = 1.79;
-      _user.gewicht = 70;
-      _user.vetpercentage = 15;
-      listusers.push(_user);
-    }
-    for(i = 10;i>5;i--)
-    {
-      let _user = new userdocent;
-      _user.userid = i;
-      _user.username = "Docent";
-      _user.wachtwoord = "Doc123";
-      listusers.push(_user);
-    }
-    this.setState({users: listusers})
-
+    fetch('http://192.168.2.22:3000/users')
+      .then(response => response.json())
+      .then(dbusers => this.setState({users:dbusers}))
   }
 
   Login = () =>
   {
-    if(this.state.loginname != null && this.state.loginpass != null)
+    if(this.state.loginname != null && this.state.loginpass != null && this.state.users != null)
     {
       let log = false;
       this.state.users.forEach(element => {

@@ -43,6 +43,7 @@ export class klassen
     {
         this.klassenid = null;
         this.klasnaam = null;
+        this.klasnaam = null;
     }
 }
 export class oefeingen
