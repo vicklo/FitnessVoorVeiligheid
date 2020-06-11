@@ -4,6 +4,9 @@ import { DataTable, Button, withTheme } from 'react-native-paper';
 import { debug, round, set } from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
 
+import ImgToBase64 from 'react-native-image-base64';
+
+
   export default class profile extends Component {
   constructor(props) {
     super(props);
@@ -13,9 +16,10 @@ import { ScrollView } from 'react-native-gesture-handler';
         klas:""
           };
   }
+
   componentDidMount =  async() => 
   {  
-    await fetch('http://192.168.2.22:3000/klassen')
+    await fetch('http://192.168.2.25:3000/klassen')
       .then(response => response.json())
       .then(dbklassen => this.setState({klassen:dbklassen}));
 
@@ -24,7 +28,9 @@ import { ScrollView } from 'react-native-gesture-handler';
             this.setState({klas: element.klasnaam})
       });
 
+      
   }
+  
 
   render() {
       if(this.state.isloading)
@@ -42,7 +48,7 @@ import { ScrollView } from 'react-native-gesture-handler';
               <View style={{width:300,height:100,position:"absolute",transform: [{ rotate: "45deg" }],backgroundColor:"#d80399",marginLeft:Dimensions.get('window').width - 180,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}></View>
               <View style={{width:300,height:100,position:"absolute",transform: [{ rotate: "45deg" }],backgroundColor:"#291876",marginLeft:Dimensions.get('window').width - 120,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}></View>
               <View style={styles.container}>
-              <Image style={{margin:5,borderRadius:75,width:150,height:150,borderWidth:2,borderColor:"#d80399",marginBottom:20}} source={{uri:loggedinuser.foto}}/>
+              <Image style={{margin:5,borderRadius:75,width:150,height:150,borderWidth:2,borderColor:"#d80399",marginBottom:20}} onLoad={this.getbase64} source={{uri:loggedinuser.foto}}/>
               <View style={{alignItems:"center" ,backgroundColor:"#291876" ,width: Dimensions.get('window').width,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}} >
                 <View style={{flexDirection:"row",alignItems:"center"}} >
                   <View style={{alignItems:"center",margin:15,width:100}}>
@@ -84,10 +90,10 @@ import { ScrollView } from 'react-native-gesture-handler';
 
                    
                 </View>
-                <Button style={{padding:5,margin:15,width:200,backgroundColor:"#291876",borderRadius:10,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}>
+                <Button onPress={() =>  this.props.navigation.navigate('wijzigprofiel', { klas: this.state.klas })} style={{padding:5,margin:15,width:200,backgroundColor:"#291876",borderRadius:10,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}>
                     <Text style={{color:"white"}}>wijzig</Text>
                 </Button> 
-                <Button style={{padding:5,margin:15,width:200,backgroundColor:"#291876",borderRadius:10,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}>
+                <Button onPress={() => NativeModules.DevSettings.reload()} style={{padding:5,margin:15,width:200,backgroundColor:"#291876",borderRadius:10,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}>
                     <Text style={{color:"white"}}>Log uit</Text>
                 </Button>
               </View>

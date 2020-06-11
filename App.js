@@ -9,10 +9,13 @@ import Image from 'react-native-scalable-image';
 
 import Home from './components/Home';
 import Logboek from './components/logboek';
+import Newlogboek from './components/Newlogboek';
 import Profiel from './components/profiel';
+import wijzigprofiel from './components/wijzigprofiel';
 import Schemas from './components/schemas';
 
 import {userstudent,userdocent} from "./classes";
+import newlogboek from './components/Newlogboek';
 
 
 
@@ -21,31 +24,67 @@ const Tab = createMaterialBottomTabNavigator();
 
 function consthome(){
   return(
-  <Stack.Navigator>
-    <Stack.Screen name="Home" component={Home}/>
+  <Stack.Navigator screenOptions={{
+    headerStyle: {
+      backgroundColor: '#291876',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }}>
+    <Stack.Screen name="Home" component={Home} />
   </Stack.Navigator>
 
   );
 }
 function constprofiel(){
   return(
-  <Stack.Navigator>
+  <Stack.Navigator screenOptions={{
+    headerStyle: {
+      backgroundColor: '#291876',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }}>
     <Stack.Screen name="Profiel" component={Profiel} />
+    <Stack.Screen name="wijzigprofiel" component={wijzigprofiel} />
   </Stack.Navigator>
 
   );
 }
 function constlogboek(){
   return(
-  <Stack.Navigator>
-    <Stack.Screen name="Logboek" component={Logboek} />
+  <Stack.Navigator       
+  screenOptions={{
+    headerStyle: {
+      backgroundColor: '#291876',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }}>
+    <Stack.Screen name="Logboek" component={Logboek} 
+    options={({navigation}) => ({headerRight:()=> (<Button onPress={() => navigation.navigate('Newlogboek')} style={{color:"white"}} >New log</Button>)})} />
+    <Stack.Screen name="Newlogboek" component={newlogboek} />
   </Stack.Navigator>
 
   );
 }
 function constschemas(){
   return(
-  <Stack.Navigator>
+  <Stack.Navigator screenOptions={{
+    headerStyle: {
+      backgroundColor: '#291876',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  }}>
     <Stack.Screen name="Schema's" component={Schemas}/>
   </Stack.Navigator>
 
@@ -65,9 +104,12 @@ export default class profile extends Component {
       user:null,
     };
   }
+  
   componentDidMount =  async() => 
-  {  
-    fetch('http://192.168.2.22:3000/users')
+  { 
+    globalThis.ipadress = "http://192.168.2.24:3000/";
+    globalThis.loggedinuser = null;
+    fetch(ipadress + 'users')
       .then(response => response.json())
       .then(dbusers => this.setState({users:dbusers}))
   }
@@ -84,8 +126,7 @@ export default class profile extends Component {
           this.setState({loggedin:true});
           this.setState({user:element});
           
-          globalThis.loggedinuser = element;
-
+          loggedinuser = element;
           return element;
         }
       });
@@ -93,6 +134,9 @@ export default class profile extends Component {
       {
         alert("Inloggegevens onjuist");
       }
+    }
+    else{
+      alert("Kan geen verbinding maken met de server conroleer of de server aan staat of dat de ipadres correct is van de laptop/computer")
     }
   }
 
@@ -117,7 +161,7 @@ export default class profile extends Component {
     return(
       <PaperProvider theme={DefaultTheme}>
           <NavigationContainer theme={DefaultTheme}>
-            <Tab.Navigator 
+            <Tab.Navigator
               >
               <Tab.Screen name="Home" component={consthome}  
                 options={{
@@ -128,6 +172,7 @@ export default class profile extends Component {
                 }}
               />
               <Tab.Screen name="Schemas" component={constschemas}
+              
                 options={{
                   tabBarLabel: "Schama's",
                   tabBarIcon: ({ color, size }) => (

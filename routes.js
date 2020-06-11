@@ -9,7 +9,7 @@ const connection = mysql.createPool({
   database : 'fitnessvoorveiligheid'
 });
 const app = express();
-
+app.use(bodyParser.json());
 // Creating a GET route that returns data from the 'users' table.
 app.get('/users', function (req, res) {
   // Connecting to the database.
@@ -39,8 +39,8 @@ app.get('/klassen', function (req, res) {
   });
 });
 });
-app.post('/users/:username/:studentmail/:wachtwoord/:klasid/:lengte/:gewicht/:fetpercentage/:voornaam/:achternaam/:foto', function (req, res) {
-  let params = req.params;
+app.post('/users', function (req, res) {
+  let params = req.body;
   // Connecting to the database.
   connection.getConnection(function (err, connection) {
 
@@ -69,13 +69,28 @@ app.delete('/users/:userid', function (req, res) {
   });
 });
 });
-app.patch('/users/:userid/:username/:studentmail/:wachtwoord/:klasid/:lengte/:gewicht/:fetpercentage/:voornaam/:achternaam/:foto', function (req, res) {
-  let params = req.params;
+app.patch('/users', function (req, res) {
+  let params = req.body;
+  console.log(params)
   // Connecting to the database.
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query("UPDATE `userstudens` SET `username` = '"+params.username+"',`studentmail` = '"+params.studentmail+"',`wachtwoord` = '"+params.wachtwoord+"',`klasid` = '"+params.klasid+"',`lengte` = '"+params.lengte+"',`gewicht` = '"+params.gewicht+"',`fetpercentage` = '"+params.fetpercentage+"',`voornaam` = '"+params.voornaam+"',`achternaam` = '"+params.achternaam+"',`foto` = '"+params.foto+"' WHERE `userstudens`.`userid` = "+ params.userid, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.get('/logboek/:id', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("SELECT * FROM `logboek` inner JOIN oefeningen on oefeningen.oefeningid = logboek.oefeningid where studentid = " + req.params.id, function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -90,3 +105,5 @@ app.patch('/users/:userid/:username/:studentmail/:wachtwoord/:klasid/:lengte/:ge
 app.listen(3000, () => {
  console.log('Go to http://localhost:3000/users so you can see the data.');
 });
+
+
