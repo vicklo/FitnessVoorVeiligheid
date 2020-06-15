@@ -70,23 +70,23 @@ import ImgToBase64 from 'react-native-image-base64';
                   <Text style={{color:"white",textAlign:"left",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>Username:</Text>
                   <Text style={{color:"white",textAlign:"right",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>{loggedinuser.username}</Text>
                 </View>
-                <View style={{height:2,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 }}></View>
+                <View style={{height:1,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 }}></View>
                   <View style={{flexDirection: "row",alignItems:"center",width:Dimensions.get('window').width}}>
                     <Text style={{color:"white",textAlign:"left",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>Naam:</Text>
                     <Text style={{color:"white",textAlign:"right",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>{loggedinuser.voornaam} {loggedinuser.achternaam}</Text>
                   </View>
-                  <View style={{height:2,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 }}></View>
+                  <View style={{height:1,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 }}></View>
 
                   <View style={{flexDirection: "row",alignItems:"center",width:Dimensions.get('window').width}}>
                     <Text style={{color:"white",textAlign:"left",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>Studentmail:</Text>
                     <Text style={{color:"white",textAlign:"right",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>{loggedinuser.studentmail}</Text>
                   </View>
-                  <View style={{height:2,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 }}></View>
+                  <View style={{height:1,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 }}></View>
                   <View style={{flexDirection: "row",alignItems:"center",width:Dimensions.get('window').width}}>
                     <Text style={{color:"white",textAlign:"left",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>klas:</Text>
                     <Text style={{color:"white",textAlign:"right",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>{this.state.klas}</Text>
                   </View>
-                  <View style={{height:2,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 ,marginBottom:10}}></View>
+                  <View style={{height:1,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 ,marginBottom:10}}></View>
 
                    
                 </View>

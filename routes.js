@@ -90,7 +90,7 @@ app.get('/logboek/:id', function (req, res) {
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("SELECT * FROM `logboek` inner JOIN oefeningen on oefeningen.oefeningid = logboek.oefeningid where studentid = " + req.params.id, function (error, results, fields) {
+  connection.query("SELECT * FROM `logboek` where studentid = " + req.params.id+" ORDER by datum DESC", function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -98,6 +98,105 @@ app.get('/logboek/:id', function (req, res) {
     res.send(results)
   });
 });
+});
+app.get('/oefening', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("SELECT * FROM `oefeningen `", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.post('/oefening', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+    let params = req.body;
+    console.log(params);
+    let day = new Date().getDate();
+    let month = new Date().getMonth() +1;
+    let year = new Date().getFullYear();
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("INSERT INTO `logboek` (`logboekid`, `studentid`, `datum`, `log`, `commentaar`, `oefeningid`) VALUES (NULL, '"+ params.studentid +"', '"+year + "-" + month + "-" + day+"', '"+params.log+"', '', '1');", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    console.log("log opgeslagen");
+    res.send(results)
+  });
+});
+});
+app.get('/schema/:id', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+    params = req.params;
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("SELECT schemasumma.schemanaam,schemaoefeningen.oefeningid,oefeningen.oefeningnaam,schemaoefeningen.sets,schemaoefeningen.hethaling,doelen.doel FROM schemasumma  INNER join doelen on doelen.doelid = schemasumma.doelid  INNER join schemaoefeningen on schemaoefeningen.schemaid = schemasumma.schemaid  INNER JOIN oefeningen on oefeningen.oefeningid = schemaoefeningen.oefeningid where schemasumma.schemaid = " + params.id, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.get('/schema', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+    params = req.params;
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("SELECT schemasumma.schemanaam,schemasumma.schemaid,COUNT(schemaoefeningen.schemaoefeningid) as oefeningen,doelen.doel FROM schemasumma INNER join doelen on doelen.doelid = schemasumma.doelid INNER join schemaoefeningen on schemaoefeningen.schemaid = schemasumma.schemaid ", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+
+});
+app.get('/messages/:klasid', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+    params = req.params;
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("SELECT * FROM `messages` inner join klassen on klassen.klasid = messages.klasid where messages.klasid = " + params.klasid, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+
+});
+app.get('/aandachtpunten', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+    params = req.body;
+let query = "SELECT * FROM `aandachtpunten` WHERE oefeningid = 0 "
+req.body.ids.forEach(element => {
+  query += " OR oefeningid = " + element;
+});
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query(query, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+
 });
 
 

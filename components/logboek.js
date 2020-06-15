@@ -10,7 +10,8 @@ import { ScrollView } from 'react-native-gesture-handler';
     super(props);
     this.state = {
         isloading:false,
-        logboek:null
+        logboek:null,
+        refreshing:false,
     };
   }
   componentDidMount =  async() => 
@@ -19,6 +20,14 @@ import { ScrollView } from 'react-native-gesture-handler';
       .then(response => response.json())
       .then(logs => this.setState({logboek:logs}));
       
+  }
+  refresh = async() =>
+  {
+    this.setState({refreshing:true});
+    await fetch(ipadress + "logboek/" + loggedinuser.userid)
+      .then(response => response.json())
+      .then(logs => this.setState({logboek:logs}));
+      this.setState({refreshing:false});
   }
   render() {
       if(this.state.logboek == null)
@@ -32,21 +41,22 @@ import { ScrollView } from 'react-native-gesture-handler';
     );
     else
         return(
-          <FlatList
+          <FlatList refreshing={this.state.refreshing} onRefresh={this.refresh}
             data={this.state.logboek}
             renderItem={({ item }) => (
               <View style={styles.container}>
                 <Text style={{alignSelf:"flex-end"}}>{item.datum.split("T")[0]}</Text>
-                <DataTable>
-                <DataTable.Row >
-                  <DataTable.Cell style={{width:50}}>Log:</DataTable.Cell>
-                  <DataTable.Cell>{item.log}</DataTable.Cell>
-                  </DataTable.Row>
-                  <DataTable.Row >
-                  <DataTable.Cell style={{width:100}}>Oefeninf</DataTable.Cell>
-                  <DataTable.Cell>{item.oefeningnaam}</DataTable.Cell>
-                  </DataTable.Row>
-                </DataTable>
+                <View style={{flexDirection: "row",minHeight:20,flex:1,flexWrap:"wrap"}}>
+                      <Text style={{flex:1,flexWrap:"wrap"}}>{item.log}</Text>
+                </View>
+                <View style={{height:1,backgroundColor:"#d80399",borderRadius:2,marginTop:2}}/>
+                {item.commentaar
+                  ? <View style={{flexDirection: "row",minHeight:20,flex:1,flexWrap:"wrap",marginTop:5}}>
+                    <Text style={{width:80}}>Commentaar:</Text>
+                    <Text style={{flex:1, flexWrap:"wrap"}}>{item.commentaar}</Text>
+                  </View>
+                  :<View/>}
+                {item.commentaar ? <View style={{height:1,backgroundColor:"#d80399",borderRadius:2,marginTop:2}}/> : <View/>}
               </View>
           )}
           keyExtractor={item => item.id}
@@ -68,7 +78,10 @@ const styles = StyleSheet.create({
       shadowOpacity: 0.34,
       shadowRadius: 6.27,
       elevation: 10,
-      backgroundColor:"lightgray",
-      padding :10
+      backgroundColor:"white",
+      padding :10,
+      borderWidth:1,
+      borderRadius:10,
+      borderColor: "#d80399"
     }
 })

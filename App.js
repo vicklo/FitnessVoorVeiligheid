@@ -13,8 +13,10 @@ import Newlogboek from './components/Newlogboek';
 import Profiel from './components/profiel';
 import wijzigprofiel from './components/wijzigprofiel';
 import Schemas from './components/schemas';
+import schema from './components/schema';
+import Oefening from './components/oefening';
 
-import {userstudent,userdocent} from "./classes";
+import {userstudent,userdocent, oefeingen} from "./classes";
 import newlogboek from './components/Newlogboek';
 
 
@@ -24,15 +26,7 @@ const Tab = createMaterialBottomTabNavigator();
 
 function consthome(){
   return(
-  <Stack.Navigator screenOptions={{
-    headerStyle: {
-      backgroundColor: '#291876',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  }}>
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
     <Stack.Screen name="Home" component={Home} />
   </Stack.Navigator>
 
@@ -40,15 +34,7 @@ function consthome(){
 }
 function constprofiel(){
   return(
-  <Stack.Navigator screenOptions={{
-    headerStyle: {
-      backgroundColor: '#291876',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  }}>
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
     <Stack.Screen name="Profiel" component={Profiel} />
     <Stack.Screen name="wijzigprofiel" component={wijzigprofiel} />
   </Stack.Navigator>
@@ -57,18 +43,9 @@ function constprofiel(){
 }
 function constlogboek(){
   return(
-  <Stack.Navigator       
-  screenOptions={{
-    headerStyle: {
-      backgroundColor: '#291876',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  }}>
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: { fontWeight: 'bold',},}}>
     <Stack.Screen name="Logboek" component={Logboek} 
-    options={({navigation}) => ({headerRight:()=> (<Button onPress={() => navigation.navigate('Newlogboek')} style={{color:"white"}} >New log</Button>)})} />
+    options={({navigation}) => ({headerRight:()=> (<Button onPress={() => navigation.navigate('Newlogboek')} style={{color:"white"}} ><Text style={{color:"white",fontSize:25}}>+</Text></Button>)})} />
     <Stack.Screen name="Newlogboek" component={newlogboek} />
   </Stack.Navigator>
 
@@ -76,16 +53,10 @@ function constlogboek(){
 }
 function constschemas(){
   return(
-  <Stack.Navigator screenOptions={{
-    headerStyle: {
-      backgroundColor: '#291876',
-    },
-    headerTintColor: '#fff',
-    headerTitleStyle: {
-      fontWeight: 'bold',
-    },
-  }}>
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
     <Stack.Screen name="Schema's" component={Schemas}/>
+    <Stack.Screen name="Schema" component={schema}/> 
+     <Stack.Screen name="Oefening" component={Oefening}/>
   </Stack.Navigator>
 
   );
@@ -102,6 +73,7 @@ export default class profile extends Component {
       loginpass:null,
       users: null,
       user:null,
+      student:true,
     };
   }
   
@@ -143,24 +115,85 @@ export default class profile extends Component {
 
 
   render(){
-    if (!this.state.loggedin){
+    if (!this.state.loggedin ){
       return (
         <View style={styles.LoginView}>
+          {this.state.student
+            ?
+            <View style={styles.LoginView}>
+              <Button style={{alignSelf:"flex-start"}} onPress={() => this.setState({student: false})} >log in als docent</Button>
+              <Image width={200} style={{margin:40}} source={{uri:'https://www.summacollege.nl/images/default-source/default-album/summa_veiligheid-min.png?sfvrsn=5e3f4c85_4'}}/>
+              <Text style={styles.LoginText}>Student naam</Text>
+              <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginname:text})}></TextInput>
+              <Text style={styles.LoginText}>Wachtwoord</Text>
+              <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginpass:text})}></TextInput>
+              <Button onPress={this.Login} style={styles.LoginButton}><Text style={{color:"white",fontSize:20}}>Login</Text></Button>
+            </View>
+            :
+            <View style={styles.LoginView}>
+              <Button onPress={() => this.setState({student:true})}>Log in als student</Button>
+              <Image width={200} style={{margin:40}} source={{uri:'https://www.summacollege.nl/images/default-source/default-album/summa_veiligheid-min.png?sfvrsn=5e3f4c85_4'}}/>
+              <Text style={styles.LoginText}>Docent naam</Text>
+              <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginname:text})}></TextInput>
+              <Text style={styles.LoginText}>Wachtwoord</Text>
+              <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginpass:text})}></TextInput>
+              <Button onPress={this.Login} style={styles.LoginButton}><Text style={{color:"white",fontSize:20}}>Login</Text></Button>
+
+            </View>
+          
+          
+        
+          }
           
 
-        <Image width={200} style={{margin:40}} source={{uri:'https://www.summacollege.nl/images/default-source/default-album/summa_veiligheid-min.png?sfvrsn=5e3f4c85_4'}}/>
-        <Text style={styles.LoginText}>Naam</Text>
-        <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginname:text})}></TextInput>
-        <Text style={styles.LoginText}>Wachtwoord</Text>
-        <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginpass:text})}></TextInput>
-        <Button onPress={this.Login} style={styles.LoginButton}>Login</Button>
       </View>
       );
     }
     
     return(
+
       <PaperProvider theme={DefaultTheme}>
-          <NavigationContainer theme={DefaultTheme}>
+          {this.state.student ?
+            <NavigationContainer theme={DefaultTheme}>
+              <Tab.Navigator
+                >
+                <Tab.Screen name="Home" component={consthome}  
+                  options={{
+                    tabBarLabel: 'Home',
+                    tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons name="home" color={color} size={size} />
+                    ),
+                  }}
+                />
+                <Tab.Screen name="Schemas" component={constschemas}
+                
+                  options={{
+                    tabBarLabel: "Schama's",
+                    tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
+                    ),
+                  }}
+                />
+                <Tab.Screen name="Logboek" component={constlogboek}
+                  options={{
+                    tabBarLabel: 'Logboek',
+                    tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons name="book" color={color} size={size} />
+                    ),
+                  }}
+                />
+                <Tab.Screen name="Profiel" component={constprofiel} 
+                  options={{
+                    tabBarLabel: 'Profiel',
+                    tabBarIcon: ({ color, size }) => (
+                      <MaterialCommunityIcons name="account" color={color} size={size} />
+                    ),
+                  }}
+                />
+              </Tab.Navigator>
+            </NavigationContainer>
+            :
+            <NavigationContainer theme={DefaultTheme}>
             <Tab.Navigator
               >
               <Tab.Screen name="Home" component={consthome}  
@@ -171,33 +204,9 @@ export default class profile extends Component {
                   ),
                 }}
               />
-              <Tab.Screen name="Schemas" component={constschemas}
-              
-                options={{
-                  tabBarLabel: "Schama's",
-                  tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
-                  ),
-                }}
-              />
-              <Tab.Screen name="Logboek" component={constlogboek}
-                options={{
-                  tabBarLabel: 'Logboek',
-                  tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="book" color={color} size={size} />
-                  ),
-                }}
-              />
-              <Tab.Screen name="Profiel" component={constprofiel} 
-                options={{
-                  tabBarLabel: 'Profiel',
-                  tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="account" color={color} size={size} />
-                  ),
-                }}
-              />
             </Tab.Navigator>
           </NavigationContainer>
+          }
       </PaperProvider>
       );
   }
@@ -224,6 +233,10 @@ const styles = StyleSheet.create({
     backgroundColor: "white"
   },
   LoginButton:{
-
+    width:150,
+    borderRadius:10,
+    backgroundColor:"#291876",
+    marginTop:10,
+    alignContent:"center"
   },
 });

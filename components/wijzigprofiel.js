@@ -21,7 +21,6 @@ import { ScrollView } from 'react-native-gesture-handler';
   wijzig = async() =>
   {
 
-    console.log('http://192.168.2.25:3000/users/'+loggedinuser.userid+'/' + loggedinuser.username + '/'+ loggedinuser.studentmail + '/'+ loggedinuser.wachtwoord + '/'+ loggedinuser.klasid + '/'+ loggedinuser.lengte + '/'+ loggedinuser.gewicht + '/'+ loggedinuser.fetpercentage + '/'+ loggedinuser.voornaam + '/'+ loggedinuser.achternaam + '/' + loggedinuser.foto)
     const jsonbody = JSON.stringify({
         "userid":loggedinuser.userid,
         "username": loggedinuser.username,
@@ -39,7 +38,7 @@ import { ScrollView } from 'react-native-gesture-handler';
     
     
     
-    await fetch('http://192.168.2.25:3000/users',{method: 'PATCH',body:jsonbody,headers: {'Content-Type': 'application/json'},})
+    await fetch(ipadress + 'users',{method: 'PATCH',body:jsonbody,headers: {'Content-Type': 'application/json'},})
       .then(response => response.json())
       .then(response => alert("Gegevens opgeslagen"));
   }
