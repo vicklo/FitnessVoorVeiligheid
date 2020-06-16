@@ -9,48 +9,42 @@ import { ScrollView } from 'react-native-gesture-handler';
   constructor(props) {
     super(props);
     this.state = {
-        isloading:false,
-        logboek:null
+        klassen:null,
+        isrefreshing:true,
     };
   }
   componentDidMount =  async() => 
   {  
-    await fetch(ipadress + "logboek/" + loggedinuser.userid)
-      .then(response => response.json())
-      .then(logs => this.setState({logboek:logs}));
-      
+    this.setState({isrefreshing : true})
+    await  fetch(ipadress + "klassen")
+      .then(Response => Response.json())
+      .then(dbklassen => this.setState({klassen:dbklassen}))
+      this.setState({isrefreshing : false})
+
   }
   render() {
-      if(this.state.logboek == null)
+      if(this.state.klassen == null)
       return (
-    <ScrollView>      
+    <View>      
         <ActivityIndicator>
 
         </ActivityIndicator>
-    </ScrollView>
+    </View>
     
     );
     else
         return(
-          <FlatList
-            data={this.state.logboek}
-            renderItem={({ item }) => (
-              <View style={styles.container}>
-                <Text style={{alignSelf:"flex-end"}}>{item.datum.split("T")[0]}</Text>
-                <DataTable>
-                <DataTable.Row>
-                  <DataTable.Cell style={{width:50}}>Log:</DataTable.Cell>
-                  <DataTable.Cell>{item.log}</DataTable.Cell>
-                  </DataTable.Row>
-                  <DataTable.Row>
-                  <DataTable.Cell style={{width:100}}>Oefeninf</DataTable.Cell>
-                  <DataTable.Cell>{item.oefeningnaam}</DataTable.Cell>
-                  </DataTable.Row>
-                </DataTable>
-              </View>
-          )}
-          keyExtractor={item => item.id}
-        />
+          <FlatList onRefresh={this.componentDidMount} refreshing={this.state.isrefreshing}
+          data={this.state.klassen}
+          renderItem={({ item }) => (
+            <View style={styles.container}>
+                <Text style={{fontSize:20}}>{item.klasnaam}</Text>  
+            </View>
+  
+        )}
+        keyExtractor={item => item.id}
+      />
+  
 
         );
   }

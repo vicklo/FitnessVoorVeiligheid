@@ -16,8 +16,19 @@ import Schemas from './components/schemas';
 import schema from './components/schema';
 import Oefening from './components/oefening';
 
+
+import docenthome from './components/docenthome';
+import docenteprofiel from './components/docentprofiel';
+import decentprofielwijzig from './components/docentprofielwijzig';
+import docentschemas from './components/docentschemas';
+import klassen from './components/klassen';
+import klastoevoegen from './components/klastoevoegen';
+import schematoevoegen from './components/schematoevoegen';
+import schemawijzig from './components/schemawijzig';
+
 import {userstudent,userdocent, oefeingen} from "./classes";
 import newlogboek from './components/Newlogboek';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -64,6 +75,66 @@ function constschemas(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+function constdocenthome(){
+  return(
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
+    <Stack.Screen name="Home" component={docenthome}/>
+  </Stack.Navigator>
+
+  );
+}function constdocentschemas(){
+  return(
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
+    <Stack.Screen name="Schema's" component={docentschemas}
+        options={({navigation}) => ({headerRight:()=> (<Button onPress={() => navigation.navigate('Schema toevoegen')} style={{color:"white"}} ><Text style={{color:"white",fontSize:25}}>+</Text></Button>)})} />
+
+    <Stack.Screen name="Schema wijzigen" component={schemawijzig}/> 
+     <Stack.Screen name="Schema toevoegen" component={schematoevoegen}/>
+  </Stack.Navigator>
+
+  );
+}function constdocentleerlingen(){
+  return(
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
+    <Stack.Screen name="Klassen" component={klassen}
+            options={({navigation}) => ({headerRight:()=> (<Button onPress={() => navigation.navigate('Klas toevoegen')} style={{color:"white"}} ><Text style={{color:"white",fontSize:25}}>+</Text></Button>)})} />
+
+    <Stack.Screen name="Klas toevoegen" component={klastoevoegen}/> 
+  </Stack.Navigator>
+
+  );
+}function constdocentprofiel(){
+  return(
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
+    <Stack.Screen name="Profiel" component={docenteprofiel}/>
+  </Stack.Navigator>
+
+  );
+}
+class userclass{
+  constructor(){
+    this.username;
+    this.studentmail;
+    this.pass;
+    this.lengte;
+    this.gewicht;
+    this.fetpercentage;
+    this.voornaam;
+    this.achternaam; 
+  }
+}
+
 export default class profile extends Component {
   constructor(props) {
     super(props);
@@ -74,6 +145,18 @@ export default class profile extends Component {
       users: null,
       user:null,
       student:true,
+      register:true,
+
+
+      username:"",
+      studentmail:"",
+      pass:"",
+      lengte:"",
+      gewicht:"",
+      fetpercentage:"",
+      voornaam:"",
+      achternaam:"",
+      docenten:null
     };
   }
   
@@ -81,9 +164,36 @@ export default class profile extends Component {
   { 
     globalThis.ipadress = "http://192.168.2.24:3000/";
     globalThis.loggedinuser = null;
-    fetch(ipadress + 'users')
+    await fetch(ipadress + 'users')
       .then(response => response.json())
       .then(dbusers => this.setState({users:dbusers}))
+    await fetch(ipadress + 'docenten')
+      .then(response => response.json())
+      .then(dbusers => this.setState({docenten:dbusers}))
+      console.log(this.state.docenten);
+  }
+  register =  async() => 
+  { 
+    if(this.state.username != null && this.state.studentmail != null && this.state.pass != null && this.state.lengte != null && this.state.gewicht != null && this.state.fetpercentage != null && this.state.voornaam != null && this.state.achternaam != null )
+    {
+      const jsonbody = JSON.stringify({
+        "username": this.state.username,
+        "studentmail": this.state.studentmail,
+        "wachtwoord": this.state.pass,
+        "lengte": this.state.lengte,
+        "gewicht":this.state.gewicht,
+        "fetpercentage": this.state.fetpercentage,
+        "voornaam":this.state.voornaam,
+        "achternaam": this.state.achternaam,
+        "foto":"",
+      });
+    
+    await fetch(ipadress + 'users',{method: 'POST',body:jsonbody,headers: {'Content-Type': 'application/json'},})
+      .then(response => response.json())
+      .then(response => alert("Gegevens opgeslagen"));
+    }
+    
+
   }
 
   Login = () =>
@@ -111,6 +221,32 @@ export default class profile extends Component {
       alert("Kan geen verbinding maken met de server conroleer of de server aan staat of dat de ipadres correct is van de laptop/computer")
     }
   }
+  Logindocent = () =>
+  {
+    if(this.state.loginname != null && this.state.loginpass != null && this.state.users != null)
+    {
+      let log = false;
+      this.state.docenten.forEach(element => {
+        if(element.username == this.state.loginname && element.wachtwoord == this.state.loginpass)
+        {
+          log = true;
+          this.setState({loggedin:true});
+          this.setState({user:element});
+          
+          loggedinuser = element;
+          return element;
+        }
+      });
+      if(!log)
+      {
+        alert("Inloggegevens onjuist");
+      }
+    }
+    else{
+      alert("Kan geen verbinding maken met de server conroleer of de server aan staat of dat de ipadres correct is van de laptop/computer")
+    }
+
+  }
 
 
 
@@ -120,14 +256,60 @@ export default class profile extends Component {
         <View style={styles.LoginView}>
           {this.state.student
             ?
-            <View style={styles.LoginView}>
-              <Button style={{alignSelf:"flex-start"}} onPress={() => this.setState({student: false})} >log in als docent</Button>
-              <Image width={200} style={{margin:40}} source={{uri:'https://www.summacollege.nl/images/default-source/default-album/summa_veiligheid-min.png?sfvrsn=5e3f4c85_4'}}/>
-              <Text style={styles.LoginText}>Student naam</Text>
-              <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginname:text})}></TextInput>
-              <Text style={styles.LoginText}>Wachtwoord</Text>
-              <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginpass:text})}></TextInput>
-              <Button onPress={this.Login} style={styles.LoginButton}><Text style={{color:"white",fontSize:20}}>Login</Text></Button>
+            <View >
+              {
+                this.state.register
+                ?
+                <View style={styles.LoginView}>
+                  <Button onPress={() => this.setState({student: false})} >log in als docent</Button>
+                  <Image width={200} style={{margin:40}} source={{uri:'https://www.summacollege.nl/images/default-source/default-album/summa_veiligheid-min.png?sfvrsn=5e3f4c85_4'}}/>
+                  <Text style={styles.LoginText}>Student naam</Text>
+                  <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginname:text})}></TextInput>
+                  <Text style={styles.LoginText}>Wachtwoord</Text>
+                  <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginpass:text})}></TextInput>
+                  <Button onPress={this.Login} style={styles.LoginButton}><Text style={{color:"white",fontSize:20}}>Login</Text></Button>
+                  <Button onPress={() => this.setState({register:false})} style={styles.register}><Text style={{fontSize:20}}>Registreren</Text></Button>
+                </View>
+                :
+                <View style={{marginTop:60}}>
+                  <ScrollView>
+                    <Button  onPress={() => this.setState({register:true})}>Terug</Button>
+                    <View  style={{flexDirection:"row",margin:10}}>
+                        <Text style={{width:100}}>Username:</Text>
+                        <TextInput onChangeText={text => this.setState({username:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                    </View>
+                    <View style={{flexDirection:"row",margin:10}}>
+                      <Text style={{width:100}}>Email:</Text>
+                        <TextInput onChangeText={text => this.setState({studentmail:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                    </View>
+                    <View style={{flexDirection:"row",margin:10}}>
+                    <Text style={{width:100}}>Wachtwoord:</Text>
+                        <TextInput onChangeText={text => this.setState({pass:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                    </View>
+                    <View style={{flexDirection:"row",margin:10}}>
+                    <Text style={{width:100}}>Voornaam:</Text>
+                        <TextInput onChangeText={text => this.setState({voornaam:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                    </View>
+                    <View style={{flexDirection:"row",margin:10}}>
+                    <Text style={{width:100}}>Achternaam:</Text>
+                        <TextInput onChangeText={text => this.setState({achternaam:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                    </View>
+                    <View style={{flexDirection:"row",margin:10}}>
+                    <Text style={{width:100}}>Lengte:</Text>
+                        <TextInput onChangeText={text => this.setState({lengte:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                    </View>
+                    <View style={{flexDirection:"row",margin:10}}>
+                    <Text style={{width:100}}>Gewicht:</Text>
+                        <TextInput onChangeText={text => this.setState({gewicht:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                    </View>
+                    <View style={{flexDirection:"row",margin:10}}>
+                    <Text style={{width:100}}>Fetpercentage:</Text>
+                        <TextInput onChangeText={text => this.setState({fetpercentage:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                    </View>
+                    <Button style={styles.LoginButton}><Text style={{color:"white",alignSelf:"center"}}>Registreren</Text></Button>
+                  </ScrollView>
+                </View>
+              }
             </View>
             :
             <View style={styles.LoginView}>
@@ -137,8 +319,7 @@ export default class profile extends Component {
               <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginname:text})}></TextInput>
               <Text style={styles.LoginText}>Wachtwoord</Text>
               <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginpass:text})}></TextInput>
-              <Button onPress={this.Login} style={styles.LoginButton}><Text style={{color:"white",fontSize:20}}>Login</Text></Button>
-
+              <Button onPress={this.Logindocent} style={styles.LoginButton}><Text style={{color:"white",fontSize:20}}>Login</Text></Button>
             </View>
           
           
@@ -196,7 +377,7 @@ export default class profile extends Component {
             <NavigationContainer theme={DefaultTheme}>
             <Tab.Navigator
               >
-              <Tab.Screen name="Home" component={consthome}  
+              <Tab.Screen name="Home" component={constdocenthome}  
                 options={{
                   tabBarLabel: 'Home',
                   tabBarIcon: ({ color, size }) => (
@@ -204,6 +385,31 @@ export default class profile extends Component {
                   ),
                 }}
               />
+              <Tab.Screen name="Schemas" component={constdocentschemas}  
+                options={{
+                  tabBarLabel: 'Schemas',
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialCommunityIcons name="Schemas" color={color} size={size} />
+                  ),
+                }}
+              />
+                            <Tab.Screen name="Leerlingen" component={constdocentleerlingen}  
+                options={{
+                  tabBarLabel: 'Leerlingen',
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialCommunityIcons name="Leerlingen" color={color} size={size} />
+                  ),
+                }}
+              />
+              <Tab.Screen name="Profiel" component={constdocentprofiel}  
+                options={{
+                  tabBarLabel: 'Profiel',
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialCommunityIcons name="Profiel" color={color} size={size} />
+                  ),
+                }}
+              />
+
             </Tab.Navigator>
           </NavigationContainer>
           }
@@ -236,6 +442,11 @@ const styles = StyleSheet.create({
     width:150,
     borderRadius:10,
     backgroundColor:"#291876",
+    marginTop:10,
+    alignContent:"center"
+  },
+  register:{
+    width:150,
     marginTop:10,
     alignContent:"center"
   },

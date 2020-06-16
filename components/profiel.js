@@ -19,7 +19,7 @@ import ImgToBase64 from 'react-native-image-base64';
 
   componentDidMount =  async() => 
   {  
-    await fetch('http://192.168.2.25:3000/klassen')
+    await fetch(ipadress + 'klassen')
       .then(response => response.json())
       .then(dbklassen => this.setState({klassen:dbklassen}));
 
