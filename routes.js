@@ -54,6 +54,35 @@ app.post('/users', function (req, res) {
   });
 });
 });
+app.post('/klassen', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+    const params = req.body
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("INSERT INTO `klassen` (`klasid`, `klasnaam`, `docentid`) VALUES (NULL, '"+params.klasnaam+"', '"+params.id+"');", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.post('/users', function (req, res) {
+  let params = req.body;
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`) VALUES (NULL, '"+ params.username +"', '"+ params.studentmail +"', '"+ params.wachtwoord +"', '"+ params.klasid +"', '"+ params.lengte +"', '"+ params.gewicht +"', '"+ params.fetpercentage +"', '"+ params.voornaam +"', '"+ params.achternaam +"', '"+ params.foto +"');", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
 app.delete('/users/:userid', function (req, res) {
   let params = req.params;
   // Connecting to the database.
@@ -77,6 +106,21 @@ app.patch('/users', function (req, res) {
 
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query("UPDATE `userstudens` SET `username` = '"+params.username+"',`studentmail` = '"+params.studentmail+"',`wachtwoord` = '"+params.wachtwoord+"',`klasid` = '"+params.klasid+"',`lengte` = '"+params.lengte+"',`gewicht` = '"+params.gewicht+"',`fetpercentage` = '"+params.fetpercentage+"',`voornaam` = '"+params.voornaam+"',`achternaam` = '"+params.achternaam+"',`foto` = '"+params.foto+"' WHERE `userstudens`.`userid` = "+ params.userid, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.post('/users', function (req, res) {
+  let params = req.body;
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`) VALUES (NULL, '"+params.username+"', '"+params.studentmail+"', '"+params.wachtwoord+"', '"+params.klasid+"', '"+ params.lengte+"', '"+params.gewicht+"', '"+params.fetpercentage+"', '"+params.voornaam+"', '"+params.achternaam+"', '"+params.foto+"');", function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -189,6 +233,49 @@ req.body.ids.forEach(element => {
 });
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query(query, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+
+});
+app.get('/docenten', function (req, res) {
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("SELECT * FROM `docent` ", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.post('/docenten', function (req, res) {
+  // Connecting to the database.
+  let params = req.body;
+  connection.getConnection(function (err, connection) {
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("INSERT INTO `docent` (`userid`, `username`, `wachtwoord`, `klasid`) VALUES (NULL, '"+params.usernsme+", '"+params.wachtwoord+"', '"+params.klasid+"');", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+
+});
+app.patch('/docenten', function (req, res) {
+  // Connecting to the database.
+  let params = req.body;
+  connection.getConnection(function (err, connection) {
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("UPDATE `docent` SET `username` = '"+params.username+"', `wachtwoord` = '"+ params.wachtwoord +"' WHERE `docent`.`userid` = 2;", function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
