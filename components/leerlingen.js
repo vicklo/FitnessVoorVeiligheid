@@ -9,21 +9,22 @@ import { ScrollView } from 'react-native-gesture-handler';
   constructor(props) {
     super(props);
     this.state = {
-        klassen:null,
-        isrefreshing:true,
+        klas:this.props.route.params.klas,
+        leerlingen:null,
+        isrefreshing:false,
     };
   }
   componentDidMount =  async() => 
   {  
     this.setState({isrefreshing : true})
-    await  fetch(ipadress + "klassen")
+    await  fetch(ipadress + "klassenstudents/" + this.state.klas.klasid)
       .then(Response => Response.json())
-      .then(dbklassen => this.setState({klassen:dbklassen}))
+      .then(dbklassen => this.setState({leerlingen:dbklassen}))
       this.setState({isrefreshing : false})
 
   }
   render() {
-      if(this.state.klassen == null)
+      if(this.state.leerlingen == null)
       return (
     <View>      
         <ActivityIndicator>
@@ -34,20 +35,19 @@ import { ScrollView } from 'react-native-gesture-handler';
     );
     else
         return(
-          <FlatList onRefresh={this.componentDidMount} refreshing={this.state.isrefreshing}
-          data={this.state.klassen}
+        <FlatList onRefresh={this.componentDidMount} refreshing={this.state.isrefreshing}
+          data={this.state.leerlingen}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Leerlingen',{klas:item})}>
-              <View style={styles.container}>
-                <Text style={{fontSize:20}}>{item.klasnaam}</Text>  
-            </View>
-
-            </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.props.navigation.navigate('Leerling',{leerling:item})}>
+                <View style={styles.container}>
+                    <Text>{item.username}</Text>
+                    <Text style={{fontSize:20}}>{item.voornaam} {item.achternaam}</Text>  
+                </View>
+              </TouchableOpacity>
   
         )}
         keyExtractor={item => item.id}
       />
-  
 
         );
   }
@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
       shadowRadius: 6.27,
       elevation: 10,
       backgroundColor:"lightgray",
-      padding :10
+      padding :10,
+      flexDirection:"row"
     }
 })

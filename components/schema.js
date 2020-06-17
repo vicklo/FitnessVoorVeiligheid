@@ -46,7 +46,7 @@ import { ScrollView } from 'react-native-gesture-handler';
             </View>
                 <FlatList data={this.state.schema}
                 renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Oefening',{id:item.oefeningid})}>
+                  <TouchableOpacity onPress={() => this.props.navigation.navigate('Oefening',{oefening:item})}>
                     <View style={{flexDirection:"row", padding: 8,borderBottomColor:"lightgray",borderBottomWidth:1,margin:10}}>
                         <Text style={{width: Dimensions.get('window').width / 3}}>{item.oefeningnaam}</Text>
                         <Text style={{width: Dimensions.get('window').width / 3}}>{item.sets}</Text>
