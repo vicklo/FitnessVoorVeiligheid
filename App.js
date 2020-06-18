@@ -25,8 +25,11 @@ import klassen from './components/klassen';
 import klastoevoegen from './components/klastoevoegen';
 import schematoevoegen from './components/schematoevoegen';
 import schemawijzig from './components/schemawijzig';
+import leerlingen from './components/leerlingen';
+import leerling from './components/leerling';
+import oefening from './components/oefeningen';
+import oefeningtoevoegen from './components/oefeningtoevoegen';
 
-import {userstudent,userdocent, oefeingen} from "./classes";
 import newlogboek from './components/Newlogboek';
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -110,7 +113,9 @@ function constdocenthome(){
     <Stack.Screen name="Klassen" component={klassen}
             options={({navigation}) => ({headerRight:()=> (<Button onPress={() => navigation.navigate('Klas toevoegen')} style={{color:"white"}} ><Text style={{color:"white",fontSize:25}}>+</Text></Button>)})} />
 
-    <Stack.Screen name="Klas toevoegen" component={klastoevoegen}/> 
+<Stack.Screen name="Klas toevoegen" component={klastoevoegen}/> 
+<Stack.Screen name="Leerlingen" component={leerlingen}/>
+<Stack.Screen name="Leerling" component={leerling}/> 
   </Stack.Navigator>
 
   );
@@ -118,6 +123,17 @@ function constdocenthome(){
   return(
   <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
     <Stack.Screen name="Profiel" component={docenteprofiel}/>
+  </Stack.Navigator>
+
+  );
+}
+function constdocentoefening(){
+  return(
+  <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
+    <Stack.Screen name="Oefingen" component={oefening}
+        options={({navigation}) => ({headerRight:()=> (<Button onPress={() => navigation.navigate('Oefingen toevoegen')} style={{color:"white"}} ><Text style={{color:"white",fontSize:25}}>+</Text></Button>)})} />
+    <Stack.Screen name="Oefingen toevoegen" component={oefeningtoevoegen}/>
+    <Stack.Screen name="Aandachtpunten" component={Oefening}/>
   </Stack.Navigator>
 
   );
@@ -389,15 +405,23 @@ export default class profile extends Component {
                 options={{
                   tabBarLabel: 'Schemas',
                   tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="Schemas" color={color} size={size} />
+                    <MaterialCommunityIcons name="home" color={color} size={size} />
                   ),
                 }}
               />
-                            <Tab.Screen name="Leerlingen" component={constdocentleerlingen}  
+              <Tab.Screen name="Oefeningen" component={constdocentoefening}  
+                options={{
+                  tabBarLabel: 'Oefeningen',
+                  tabBarIcon: ({ color, size }) => (
+                    <MaterialCommunityIcons name="home" color={color} size={size} />
+                  ),
+                }}
+              />
+              <Tab.Screen name="Leerlingen" component={constdocentleerlingen}  
                 options={{
                   tabBarLabel: 'Leerlingen',
                   tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="Leerlingen" color={color} size={size} />
+                    <MaterialCommunityIcons name="home" color={color} size={size} />
                   ),
                 }}
               />
@@ -405,7 +429,7 @@ export default class profile extends Component {
                 options={{
                   tabBarLabel: 'Profiel',
                   tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="Profiel" color={color} size={size} />
+                    <MaterialCommunityIcons name="home" color={color} size={size} />
                   ),
                 }}
               />

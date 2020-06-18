@@ -9,21 +9,23 @@ import { ScrollView } from 'react-native-gesture-handler';
   constructor(props) {
     super(props);
     this.state = {
-        klassen:null,
+        oefeningen:null,
         isrefreshing:true,
     };
   }
   componentDidMount =  async() => 
   {  
     this.setState({isrefreshing : true})
-    await  fetch(ipadress + "klassen")
+    await  fetch(ipadress + "oefeningen")
       .then(Response => Response.json())
-      .then(dbklassen => this.setState({klassen:dbklassen}))
+      .then(dboefeningen => this.setState({oefeningen:dboefeningen}))
+
+    console.log(this.state.oefeningen)
       this.setState({isrefreshing : false})
 
   }
   render() {
-      if(this.state.klassen == null)
+      if(this.state.oefeningen == null)
       return (
     <View>      
         <ActivityIndicator>
@@ -35,11 +37,11 @@ import { ScrollView } from 'react-native-gesture-handler';
     else
         return(
           <FlatList onRefresh={this.componentDidMount} refreshing={this.state.isrefreshing}
-          data={this.state.klassen}
+          data={this.state.oefeningen}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('Leerlingen',{klas:item})}>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Aandachtpunten',{oefening:item})}>
               <View style={styles.container}>
-                <Text style={{fontSize:20}}>{item.klasnaam}</Text>  
+                <Text style={{fontSize:20}}>{item.oefeningnaam}</Text>  
             </View>
 
             </TouchableOpacity>
