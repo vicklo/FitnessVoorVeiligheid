@@ -53,15 +53,15 @@ import ImgToBase64 from 'react-native-image-base64';
                 <View style={{flexDirection:"row",alignItems:"center"}} >
                   <View style={{alignItems:"center",margin:15,width:100}}>
                       <Text style={{color:"white",fontSize:15}}>Lengte</Text>
-                      <Text style={{color:"white",fontSize:30}}>{loggedinuser.lengte}</Text>
+                      <Text style={{color:"white",fontSize:30}}>{loggedinuser.lengte}M</Text>
                   </View> 
                   <View style={{alignItems:"center",margin:15,width:100}}>
                       <Text style={{color:"white",fontSize:15}}>Gewicht</Text>
-                      <Text style={{color:"white",fontSize:30}}>{loggedinuser.gewicht}</Text>
+                      <Text style={{color:"white",fontSize:30}}>{loggedinuser.gewicht}Kg</Text>
                   </View>
                   <View style={{alignItems:"center",margin:15,width:100}}>
                     <Text style={{color:"white",fontSize:15}}>fetpercentage</Text>
-                    <Text style={{color:"white",fontSize:30}}>{loggedinuser.fetpercentage}</Text> 
+                    <Text style={{color:"white",fontSize:30}}>{loggedinuser.fetpercentage}%</Text> 
                   </View>
                 </View>
               </View>

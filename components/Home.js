@@ -15,19 +15,12 @@ import { ScrollView } from 'react-native-gesture-handler';
   }
   componentDidMount =  async() => 
   {  
-    console.log(ipadress + "messages/"+ loggedinuser.klasid);
-    await fetch(ipadress + "messages/" + loggedinuser.klasid)
-      .then(response => response.json())
-      .then(logs => this.setState({messages:logs}));
-      
-  }
-  refresh = async() =>
-  {
     this.setState({refreshing:true});
     await fetch(ipadress + "messages/"+ loggedinuser.klasid)
       .then(response => response.json())
       .then(logs => this.setState({messages:logs}));
       this.setState({refreshing:false});
+      
   }
 
 render() {
@@ -42,20 +35,30 @@ render() {
 );
 else
     return(
+      <View style={{flex: 1,alignItems: 'center',justifyContent: 'center'}}>
+          {this.state.messages.count == 0 ?
+            <View >
+              <Text>Er zijn geen berichten gevonden</Text>
+            </View>
+              :
+              <FlatList refreshing={this.state.refreshing} onRefresh={this.componentDidMount}
+              data={this.state.messages}
+              renderItem={({ item }) => (
+                <View style={styles.container}>
+                      <Text style={{fontSize:20}}>{item.klasnaam}</Text>
+                    
+                    <Text style={{fontSize:20}}>{item.message}</Text>
+                    <View style={{height:1,backgroundColor:"#d80399",borderRadius:2,marginTop:2}}/>
+                    <Text style={{fontSize:15,alignSelf:"flex-end",margin:5}}>{item.datum.split('T')[0]}</Text>
+                </View>
+      
+            )}
+            keyExtractor={item => item.id}
+          />
+      
 
-      <FlatList refreshing={this.state.refreshing} onRefresh={this.refresh}
-        data={this.state.messages}
-        renderItem={({ item }) => (
-          <View style={styles.container}>
-              <Text style={{fontSize:20}}>{item.klasnaam}</Text>
-              <Text style={{fontSize:20}}>{item.message}</Text>
-              <View style={{height:1,backgroundColor:"#d80399",borderRadius:2,marginTop:2}}/>
-
-          </View>
-
-      )}
-      keyExtractor={item => item.id}
-    />
+          }
+      </View>
 
     );
 }

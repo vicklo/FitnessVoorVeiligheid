@@ -5,7 +5,6 @@ import { debug, round, set } from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
-
   export default class profile extends Component {
     constructor(props) {
       super(props);
@@ -16,9 +15,30 @@ import { ScrollView } from 'react-native-gesture-handler';
     }
     componentDidMount =  async() => 
     {  
+
       await fetch(ipadress + "schema/"+ this.state.schemaid)
         .then(response => response.json())
         .then(schema => this.setState({schema:schema}));
+    }
+    schemavolgen =  async() => 
+    {  
+      await fetch(ipadress + "volgschema/"+ this.state.schemaid + "/" + loggedinuser.userid,{method: 'PATCH'})
+        .then(response => response.json())
+        .then(response => loggedinuser.schemaid = this.state.schemaid)
+        .then(response => globalThis.loggedinuser = loggedinuser)
+        .then(response => this.props.route.params.onBack(this.state.schemaid))
+        .then(schema => this.props.navigation.goBack());
+      
+    }
+    ontvolgen =  async() => 
+    {  
+      await fetch(ipadress + "volgschema/NULL/" + loggedinuser.userid,{method: 'PATCH'})
+        .then(response => response.json())
+        .then(response => loggedinuser.schemaid = null)
+        .then(response => globalThis.loggedinuser = loggedinuser)
+        .then(response =>  this.props.route.params.onBack(1))
+        .then(response => this.props.navigation.goBack());
+  
     }
   
   render() {
@@ -40,21 +60,29 @@ import { ScrollView } from 'react-native-gesture-handler';
                 <Text style={{fontSize:23,color:"gray"}}>{this.state.schema[0].doel}</Text>
             </View>
             <View style={{flexDirection:"row", padding: 8,borderBottomColor:"black",borderBottomWidth:2,margin:2}}>
+            <Text styles={{width:20}}>        </Text>
                 <Text style={{width: Dimensions.get('window').width / 3}}>Oefening</Text>
                 <Text style={{width: Dimensions.get('window').width / 3}}>Sets</Text>
                 <Text style={{width: Dimensions.get('window').width / 3}}>Herhaling</Text>
             </View>
                 <FlatList data={this.state.schema}
-                renderItem={({ item }) => (
+                renderItem={({ item,index }) => (
                   <TouchableOpacity onPress={() => this.props.navigation.navigate('Oefening',{oefening:item})}>
                     <View style={{flexDirection:"row", padding: 8,borderBottomColor:"lightgray",borderBottomWidth:1,margin:10}}>
-                        <Text style={{width: Dimensions.get('window').width / 3}}>{item.oefeningnaam}</Text>
-                        <Text style={{width: Dimensions.get('window').width / 3}}>{item.sets}</Text>
-                        <Text style={{width: Dimensions.get('window').width / 3}}>{item.hethaling}</Text>
+                      <Text styles={{width:20}}>{index}    </Text>
+                        <Text style={{width: Dimensions.get('window').width / 3 }}>{item.oefeningnaam}</Text>
+                        <Text style={{width: Dimensions.get('window').width / 3 }}>{item.sets}</Text>
+                        <Text style={{width: Dimensions.get('window').width / 3 }}>{item.hethaling}</Text>
                     </View>
                   </TouchableOpacity>
                 )}
                 />
+                {!loggedinuser.schemaid
+                  ?
+                  <Button onPress={this.schemavolgen} >Volgen</Button>
+                  :
+                  <Button onPress={this.ontvolgen} >Ontvolgen</Button>
+                }
         </View>
 
 

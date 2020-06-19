@@ -1,9 +1,9 @@
 import React, { Component, useLayoutEffect } from 'react';
-import { View, ActivityIndicator,FlatList,StyleSheet,Text,Dimensions,TouchableOpacity   } from 'react-native';
+import { View, ActivityIndicator,FlatList,StyleSheet,Text,Dimensions,TouchableOpacity    } from 'react-native';
 import { DataTable, Button, withTheme } from 'react-native-paper'; 
 import { debug, round, set } from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import { WebView } from 'react-native-webview';
   export default class oefening extends Component {
     constructor(props) {
       super(props);
@@ -34,6 +34,7 @@ import { ScrollView } from 'react-native-gesture-handler';
                     </View>
                 )}
                 />
+
         </View>
 
       );

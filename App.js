@@ -20,7 +20,6 @@ import Oefening from './components/oefening';
 import docenthome from './components/docenthome';
 import docenteprofiel from './components/docentprofiel';
 import decentprofielwijzig from './components/docentprofielwijzig';
-import docentschemas from './components/docentschemas';
 import klassen from './components/klassen';
 import klastoevoegen from './components/klastoevoegen';
 import schematoevoegen from './components/schematoevoegen';
@@ -29,6 +28,7 @@ import leerlingen from './components/leerlingen';
 import leerling from './components/leerling';
 import oefening from './components/oefeningen';
 import oefeningtoevoegen from './components/oefeningtoevoegen';
+import docentschemas from './components/docentschemas';
 
 import newlogboek from './components/Newlogboek';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -50,6 +50,7 @@ function constprofiel(){
   return(
   <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
     <Stack.Screen name="Profiel" component={Profiel} />
+
     <Stack.Screen name="wijzigprofiel" component={wijzigprofiel} />
   </Stack.Navigator>
 
@@ -101,9 +102,10 @@ function constdocenthome(){
   <Stack.Navigator screenOptions={{headerStyle: {backgroundColor: '#291876',},headerTintColor: '#fff',headerTitleStyle: {fontWeight: 'bold',},}}>
     <Stack.Screen name="Schema's" component={docentschemas}
         options={({navigation}) => ({headerRight:()=> (<Button onPress={() => navigation.navigate('Schema toevoegen')} style={{color:"white"}} ><Text style={{color:"white",fontSize:25}}>+</Text></Button>)})} />
-
+        
     <Stack.Screen name="Schema wijzigen" component={schemawijzig}/> 
      <Stack.Screen name="Schema toevoegen" component={schematoevoegen}/>
+     <Stack.Screen name="Oefening" component={Oefening}/>
   </Stack.Navigator>
 
   );
@@ -116,6 +118,7 @@ function constdocenthome(){
 <Stack.Screen name="Klas toevoegen" component={klastoevoegen}/> 
 <Stack.Screen name="Leerlingen" component={leerlingen}/>
 <Stack.Screen name="Leerling" component={leerling}/> 
+
   </Stack.Navigator>
 
   );

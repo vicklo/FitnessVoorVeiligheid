@@ -206,7 +206,7 @@ app.get('/oefening', function (req, res) {
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("SELECT * FROM `oefeningen `", function (error, results, fields) {
+  connection.query("SELECT * FROM `oefeningen`", function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -255,7 +255,7 @@ app.get('/schema', function (req, res) {
     params = req.params;
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("SELECT schemasumma.schemanaam,schemasumma.schemaid,COUNT(schemaoefeningen.schemaoefeningid) as oefeningen,doelen.doel FROM schemasumma INNER join doelen on doelen.doelid = schemasumma.doelid INNER join schemaoefeningen on schemaoefeningen.schemaid = schemasumma.schemaid ", function (error, results, fields) {
+  connection.query("SELECT schemasumma.schemanaam,schemasumma.schemaid,doelen.doel FROM schemasumma INNER join doelen on doelen.doelid = schemasumma.doelid  ", function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -343,12 +343,6 @@ app.patch('/docenten', function (req, res) {
 });
 
 });
-
-
-// Starting our server.
-app.listen(3000, () => {
- console.log('Go to http://localhost:3000/users so you can see the data.');
-});
 app.get('/oefeningen', function (req, res) {
   let params = req.body;
   // Connecting to the database.
@@ -385,7 +379,7 @@ app.get('/aandachtspunten/:id', function (req, res) {
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("SELECT * FROM `aandachtpunten` where oefeningid = " + req.params.id, function (error, results, fields) {
+  connection.query("SELECT * FROM `oefeningen` INNER JOIN aandachtpunten on aandachtpunten.oefeningid = oefeningen.oefeningid where oefeningen.oefeningid = " + req.params.id, function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -394,5 +388,92 @@ app.get('/aandachtspunten/:id', function (req, res) {
   });
 });
 });
+app.patch('/volgschema/:schemaid/:userid', function (req, res) {
+  let params = req.body;
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("UPDATE `userstudens` SET `schemaid` = "+req.params.schemaid+" WHERE `userstudens`.`userid` = " + req.params.userid, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.get('/docenterichten', function (req, res) {
+  let params = req.body;
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("select * from docentberichten", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.get('/doelen', function (req, res) {
+  let params = req.body;
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("SELECT * FROM `doelen` ", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+
+app.post('/schemaoefening', function (req, res) {
+  let params = req.body;
+  console.log(params)
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+    let query = "INSERT INTO `schemaoefeningen` (`schemaoefeningid`, `oefeningid`, `sets`, `hethaling`, `schemaid`) VALUES (NULL, '"+params.oefeningid+"', '"+params.sets+"', '"+params.hethaling+"', '"+params.schemaid+"')"
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query(query, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.post('/schema', function (req, res) {
+  let params = req.body;
+  console.log(params)
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+    let query = "INSERT INTO `schemasumma` (`schemaid`, `doelid`, `schemanaam`) VALUES (NULL, '"+params.doelid+"', '"+params.schemanaam+"')";
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query(query, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+
+
+// Starting our server.
+app.listen(3000, () => {
+  console.log('Go to http://localhost:3000/users so you can see the data.');
+ });
+
 
 
