@@ -41,26 +41,38 @@ import { ScrollView } from 'react-native-gesture-handler';
     );
     else
         return(
-          <FlatList refreshing={this.state.refreshing} onRefresh={this.refresh}
-            data={this.state.logboek}
-            renderItem={({ item }) => (
-              <View style={styles.container}>
-                <Text style={{alignSelf:"flex-end"}}>{item.datum.split("T")[0]}</Text>
-                <View style={{flexDirection: "row",minHeight:20,flex:1,flexWrap:"wrap"}}>
-                      <Text style={{flex:1,flexWrap:"wrap"}}>{item.log}</Text>
-                </View>
-                <View style={{height:1,backgroundColor:"#d80399",borderRadius:2,marginTop:2}}/>
-                {item.commentaar
-                  ? <View style={{flexDirection: "row",minHeight:20,flex:1,flexWrap:"wrap",marginTop:5}}>
-                    <Text style={{width:80}}>Commentaar:</Text>
-                    <Text style={{flex:1, flexWrap:"wrap"}}>{item.commentaar}</Text>
-                  </View>
-                  :<View/>}
-                {item.commentaar ? <View style={{height:1,backgroundColor:"#d80399",borderRadius:2,marginTop:2}}/> : <View/>}
+          <View style={{flex: 1,alignItems: 'center',justifyContent: 'center'}}>
+              {this.state.logboek
+              ?
+              <View >
+              <Text>Er zijn geen logs gevonden</Text>
               </View>
-          )}
-          keyExtractor={item => item.id}
-        />
+
+              :
+              <FlatList refreshing={this.state.refreshing} onRefresh={this.refresh}
+              data={this.state.logboek}
+              renderItem={({ item }) => (
+                <View style={styles.container}>
+                  <Text style={{alignSelf:"flex-end"}}>{item.datum.split("T")[0]}</Text>
+                  <View style={{flexDirection: "row",minHeight:20,flex:1,flexWrap:"wrap"}}>
+                        <Text style={{flex:1,flexWrap:"wrap"}}>{item.log}</Text>
+                  </View>
+                  <View style={{height:1,backgroundColor:"#d80399",borderRadius:2,marginTop:2}}/>
+                  {item.commentaar
+                    ? <View style={{flexDirection: "row",minHeight:20,flex:1,flexWrap:"wrap",marginTop:5}}>
+                      <Text style={{width:80}}>Commentaar:</Text>
+                      <Text style={{flex:1, flexWrap:"wrap"}}>{item.commentaar}</Text>
+                    </View>
+                    :<View/>}
+                  {item.commentaar ? <View style={{height:1,backgroundColor:"#d80399",borderRadius:2,marginTop:2}}/> : <View/>}
+                </View>
+            )}
+            keyExtractor={item => item.id}
+          />
+  
+
+              }
+          </View>
 
         );
   }

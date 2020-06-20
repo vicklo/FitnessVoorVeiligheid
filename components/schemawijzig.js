@@ -1,5 +1,5 @@
 import React, { Component, useLayoutEffect } from 'react';
-import { View, ActivityIndicator,FlatList,StyleSheet,Text,Dimensions,TouchableOpacity   } from 'react-native';
+import { View, ActivityIndicator,FlatList,StyleSheet,Text,Dimensions,TouchableOpacity,Alert    } from 'react-native';
 import { DataTable, Button, withTheme, TextInput } from 'react-native-paper'; 
 import { debug, round, set } from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -126,7 +126,7 @@ class item
 
                 </View>
                 :
-                <Text>geen oefeningen</Text>
+                <ActivityIndicator></ActivityIndicator>
 
                 }
             </ScrollView>

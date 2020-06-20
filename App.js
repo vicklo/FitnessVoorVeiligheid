@@ -35,6 +35,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 
 
+
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
 
@@ -204,12 +205,14 @@ export default class profile extends Component {
         "fetpercentage": this.state.fetpercentage,
         "voornaam":this.state.voornaam,
         "achternaam": this.state.achternaam,
-        "foto":"",
+        "foto":"https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png",
       });
     
     await fetch(ipadress + 'users',{method: 'POST',body:jsonbody,headers: {'Content-Type': 'application/json'},})
       .then(response => response.json())
-      .then(response => alert("Gegevens opgeslagen"));
+      .then(response => alert("Gegevens opgeslagen"))
+      .then(response => this.setState({register:true}))
+      .then(response => this.componentDidMount());
     }
     
 
@@ -311,21 +314,21 @@ export default class profile extends Component {
                     </View>
                     <View style={{flexDirection:"row",margin:10}}>
                     <Text style={{width:100}}>Achternaam:</Text>
-                        <TextInput onChangeText={text => this.setState({achternaam:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                        <TextInput onChangeText={text => this.setState({achternaam:text.replace(",",".")})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
                     </View>
                     <View style={{flexDirection:"row",margin:10}}>
                     <Text style={{width:100}}>Lengte:</Text>
-                        <TextInput onChangeText={text => this.setState({lengte:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                        <TextInput onChangeText={text => this.setState({lengte:text.replace(",",".")})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
                     </View>
                     <View style={{flexDirection:"row",margin:10}}>
                     <Text style={{width:100}}>Gewicht:</Text>
-                        <TextInput onChangeText={text => this.setState({gewicht:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                        <TextInput onChangeText={text => this.setState({gewicht:text.replace(",",".")})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
                     </View>
                     <View style={{flexDirection:"row",margin:10}}>
                     <Text style={{width:100}}>Fetpercentage:</Text>
-                        <TextInput onChangeText={text => this.setState({fetpercentage:text})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
+                        <TextInput onChangeText={text => this.setState({fetpercentage:text.replace(",",".")})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
                     </View>
-                    <Button style={styles.LoginButton}><Text style={{color:"white",alignSelf:"center"}}>Registreren</Text></Button>
+                    <Button onPress={this.register} style={styles.LoginButton}><Text style={{color:"white",alignSelf:"center"}}>Registreren</Text></Button>
                   </ScrollView>
                 </View>
               }
@@ -473,7 +476,7 @@ const styles = StyleSheet.create({
     alignContent:"center"
   },
   register:{
-    width:150,
+    width:200,
     marginTop:10,
     alignContent:"center"
   },

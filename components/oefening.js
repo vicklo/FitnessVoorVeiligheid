@@ -1,5 +1,5 @@
 import React, { Component, useLayoutEffect } from 'react';
-import { View, ActivityIndicator,FlatList,StyleSheet,Text,Dimensions,TouchableOpacity    } from 'react-native';
+import { View, ActivityIndicator,FlatList,StyleSheet,Text,Dimensions,TouchableOpacity,Alert    } from 'react-native';
 import { DataTable, Button, withTheme } from 'react-native-paper'; 
 import { debug, round, set } from 'react-native-reanimated';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -19,6 +19,36 @@ import { WebView } from 'react-native-webview';
         .then(response => response.json())
         .then(dbaandachtspunten => this.setState({aandachtspunten:dbaandachtspunten}));
     }
+    showalert = () =>
+    {
+      Alert.prompt(
+        "Aandachtspunt toevoegen",
+        "Oefening " + this.state.oefening.oefeningnaam,
+        [
+          {
+            text: "Annuleer",
+            style: "cancel"
+          },
+          {
+            text: "OK",
+            onPress: text => this.toevoegen(text)
+          }
+        ]
+      );
+    }
+    toevoegen = async(text) =>
+    {
+      const jsonbody = JSON.stringify({
+        "text": text,
+        "id": this.state.oefening.oefeningid
+      });
+    
+    await fetch(ipadress + 'aandachtpunten',{method: 'POST',body:jsonbody,headers: {'Content-Type': 'application/json'},})
+      .then(response => response.json())
+      .then(response => alert("Gegevens opgeslagen"))
+      .then(response => this.setState({register:true}))
+      .then(response => this.componentDidMount());
+    }
   render() {
       return(
         <View>
@@ -34,6 +64,13 @@ import { WebView } from 'react-native-webview';
                     </View>
                 )}
                 />
+                {loggedinuser.docent
+                ?
+                <Button onPress={() => this.showalert()}>Aandachtspunt toevoegen</Button>
+                :
+                <View/>
+
+                }
 
         </View>
 

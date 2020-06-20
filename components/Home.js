@@ -36,7 +36,8 @@ render() {
 else
     return(
       <View style={{flex: 1,alignItems: 'center',justifyContent: 'center'}}>
-          {this.state.messages.count == 0 ?
+          {this.state.messages
+          ?
             <View >
               <Text>Er zijn geen berichten gevonden</Text>
             </View>

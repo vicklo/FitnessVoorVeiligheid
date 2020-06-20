@@ -84,7 +84,12 @@ import ImgToBase64 from 'react-native-image-base64';
                   <View style={{height:1,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 }}></View>
                   <View style={{flexDirection: "row",alignItems:"center",width:Dimensions.get('window').width}}>
                     <Text style={{color:"white",textAlign:"left",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>klas:</Text>
+                    {this.state.klas
+                    ?
                     <Text style={{color:"white",textAlign:"right",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>{this.state.klas}</Text>
+                    :
+                    <Text style={{color:"white",textAlign:"right",width:Dimensions.get('window').width / 2 - 20,margin:10,fontSize:18}}>Je zit nog niet in een klas</Text>
+                    }
                   </View>
                   <View style={{height:1,width: Dimensions.get('window').width - 15,backgroundColor:"#d80399",alignSelf:"center" ,borderRadius:2 ,marginBottom:10}}></View>
 

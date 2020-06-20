@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
     constructor(props) {
       super(props);
       this.state = {
-          schemaid: this.props.route.params.id,
+          schemaid: this.props.route.params.schema.schemaid,
           schema:null,
       };
     }
@@ -19,6 +19,8 @@ import { ScrollView } from 'react-native-gesture-handler';
       await fetch(ipadress + "schema/"+ this.state.schemaid)
         .then(response => response.json())
         .then(schema => this.setState({schema:schema}));
+
+        console.log(this.state.schema)
     }
     schemavolgen =  async() => 
     {  
@@ -53,11 +55,11 @@ import { ScrollView } from 'react-native-gesture-handler';
   );
   else
       return(
-        <View>
-            <Text style={{fontSize:30}}>{this.state.schema[0].schemanaam}</Text>
-            <View style={{flexDirection:"row"}}>
+        <ScrollView>
+            <Text style={{fontSize:30,margin:5}}>{this.props.route.params.schema.schemanaam}</Text>
+            <View style={{flexDirection:"row",margin:5}}>
                 <Text style={{fontSize:23,color:"gray"}}>Doel:</Text>
-                <Text style={{fontSize:23,color:"gray"}}>{this.state.schema[0].doel}</Text>
+                <Text style={{fontSize:23,color:"gray"}}>{this.props.route.params.schema.doel}</Text>
             </View>
             <View style={{flexDirection:"row", padding: 8,borderBottomColor:"black",borderBottomWidth:2,margin:2}}>
             <Text styles={{width:20}}>        </Text>
@@ -77,13 +79,22 @@ import { ScrollView } from 'react-native-gesture-handler';
                   </TouchableOpacity>
                 )}
                 />
-                {!loggedinuser.schemaid
+                {this.state.schema[0]
+                ?
+                <View>{!loggedinuser.schemaid
                   ?
                   <Button onPress={this.schemavolgen} >Volgen</Button>
                   :
                   <Button onPress={this.ontvolgen} >Ontvolgen</Button>
+                }</View>
+                :
+                <View style={{alignSelf:"center",margin:5}}>
+                <Text>Dit schema kan je niet volgen</Text>
+                </View>
+
+
                 }
-        </View>
+        </ScrollView>
 
 
       );

@@ -82,7 +82,7 @@ import { ScrollView } from 'react-native-gesture-handler';
         <FlatList refreshing={this.state.refreshing} onRefresh={this.refresh}
           data={this.state.schemas}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={()=> this.props.navigation.navigate('Schema',{id:item.schemaid,onBack:this.onBack})}>
+            <TouchableOpacity onPress={()=> this.props.navigation.navigate('Schema',{schema:item,onBack:this.onBack})}>
               <View style={styles.container}>
                 <Text style={{fontSize:30,flex:1,flexWrap:"wrap"}}>{item.schemanaam}</Text>
                 <View style={{flexDirection:"row",margin:5}}>
@@ -109,8 +109,8 @@ import { ScrollView } from 'react-native-gesture-handler';
     else
     return(
       <View>
-      <Text style={{fontSize:30}}>{this.state.schema[0].schemanaam}</Text>
-      <View style={{flexDirection:"row"}}>
+      <Text style={{fontSize:30,margin:5}}>{this.state.schema[0].schemanaam}</Text>
+      <View style={{flexDirection:"row",margin:5}}>
           <Text style={{fontSize:23,color:"gray"}}>Doel:</Text>
           <Text style={{fontSize:23,color:"gray"}}>{this.state.schema[0].doel}</Text>
       </View>

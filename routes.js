@@ -41,11 +41,12 @@ app.get('/klassen', function (req, res) {
 });
 app.post('/users', function (req, res) {
   let params = req.body;
+  console.log(params);
   // Connecting to the database.
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`) VALUES (NULL, '"+ params.username +"', '"+ params.studentmail +"', '"+ params.wachtwoord +"', '"+ params.klasid +"', '"+ params.lengte +"', '"+ params.gewicht +"', '"+ params.fetpercentage +"', '"+ params.voornaam +"', '"+ params.achternaam +"', '"+ params.foto +"');", function (error, results, fields) {
+  connection.query("INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`, `schemaid`, `docent`) VALUES (NULL, '"+ params.username +"', '"+ params.studentmail +"', '"+ params.wachtwoord +"', NULL, '"+ params.lengte.replace(",",".") +"', '"+ params.gewicht.replace(",",".") +"', '"+ params.fetpercentage.replace(",",".") +"', '"+ params.voornaam +"', '"+ params.achternaam +"', '"+ params.foto +"', NULL, '0');", function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -60,21 +61,6 @@ app.get('/klassenstudents/:id', function (req, res) {
 
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query('SELECT * FROM userstudens where klasid = ' + req.params.id, function (error, results, fields) {
-    // If some error occurs, we throw an error.
-    if (error) throw error;
-
-    // Getting the 'response' from the database and sending it to our route. This is were the data is.
-    res.send(results)
-  });
-});
-});
-app.post('/users', function (req, res) {
-  let params = req.body;
-  // Connecting to the database.
-  connection.getConnection(function (err, connection) {
-
-  // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`) VALUES (NULL, '"+ params.username +"', '"+ params.studentmail +"', '"+ params.wachtwoord +"', '"+ params.klasid +"', '"+ params.lengte +"', '"+ params.gewicht +"', '"+ params.fetpercentage +"', '"+ params.voornaam +"', '"+ params.achternaam +"', '"+ params.foto +"');", function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -126,21 +112,6 @@ app.post('/klassen', function (req, res) {
   });
 });
 });
-app.post('/users', function (req, res) {
-  let params = req.body;
-  // Connecting to the database.
-  connection.getConnection(function (err, connection) {
-
-  // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`) VALUES (NULL, '"+ params.username +"', '"+ params.studentmail +"', '"+ params.wachtwoord +"', '"+ params.klasid +"', '"+ params.lengte +"', '"+ params.gewicht +"', '"+ params.fetpercentage +"', '"+ params.voornaam +"', '"+ params.achternaam +"', '"+ params.foto +"');", function (error, results, fields) {
-    // If some error occurs, we throw an error.
-    if (error) throw error;
-
-    // Getting the 'response' from the database and sending it to our route. This is were the data is.
-    res.send(results)
-  });
-});
-});
 app.delete('/users/:userid', function (req, res) {
   let params = req.params;
   // Connecting to the database.
@@ -163,22 +134,7 @@ app.patch('/users', function (req, res) {
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("UPDATE `userstudens` SET `username` = '"+params.username+"',`studentmail` = '"+params.studentmail+"',`wachtwoord` = '"+params.wachtwoord+"',`klasid` = '"+params.klasid+"',`lengte` = '"+params.lengte+"',`gewicht` = '"+params.gewicht+"',`fetpercentage` = '"+params.fetpercentage+"',`voornaam` = '"+params.voornaam+"',`achternaam` = '"+params.achternaam+"',`foto` = '"+params.foto+"' WHERE `userstudens`.`userid` = "+ params.userid, function (error, results, fields) {
-    // If some error occurs, we throw an error.
-    if (error) throw error;
-
-    // Getting the 'response' from the database and sending it to our route. This is were the data is.
-    res.send(results)
-  });
-});
-});
-app.post('/users', function (req, res) {
-  let params = req.body;
-  // Connecting to the database.
-  connection.getConnection(function (err, connection) {
-
-  // Executing the MySQL query (select all data from the 'users' table).
-  connection.query("INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`) VALUES (NULL, '"+params.username+"', '"+params.studentmail+"', '"+params.wachtwoord+"', '"+params.klasid+"', '"+ params.lengte+"', '"+params.gewicht+"', '"+params.fetpercentage+"', '"+params.voornaam+"', '"+params.achternaam+"', '"+params.foto+"');", function (error, results, fields) {
+  connection.query("UPDATE `userstudens` SET `username` = '"+params.username+"',`studentmail` = '"+params.studentmail+"',`wachtwoord` = '"+params.wachtwoord+"',`klasid` = "+params.klasid+",`lengte` = '"+params.lengte+"',`gewicht` = '"+params.gewicht+"',`fetpercentage` = '"+params.fetpercentage+"',`voornaam` = '"+params.voornaam+"',`achternaam` = '"+params.achternaam+"',`foto` = '"+params.foto+"' WHERE `userstudens`.`userid` = "+ params.userid, function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -460,6 +416,22 @@ app.post('/schema', function (req, res) {
 
   // Executing the MySQL query (select all data from the 'users' table).
   connection.query(query, function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
+app.post('/aandachtpunten', function (req, res) {
+  let params = req.body;
+  console.log(params)
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("INSERT INTO `aandachtpunten` (`aandachtpuntid`, `oefeningid`, `aandachtspunt`) VALUES (NULL, '"+params.id+"', '"+params.text+"');", function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 

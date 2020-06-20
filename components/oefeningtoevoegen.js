@@ -39,7 +39,7 @@ import { ScrollView } from 'react-native-gesture-handler';
                  <TextInput onChangeText={text =>  this.setState({oefeningnaam:text})} style={{width:200,height:20,margin:10,backgroundColor:"none" }}></TextInput>
             </View>
             <View style={{flexDirection:"row",alignItems:"center",marginTop:50}}>
-                 <Text>Oefening naam</Text>
+                 <Text>Oefening video</Text>
                  <TextInput onChangeText={text =>  this.setState({oefeningvideo:text})} style={{width:200,height:20,margin:10,backgroundColor:"none" }}></TextInput>
             </View>
             <Button onPress={this.voegtoe}>Toevoegen</Button>
