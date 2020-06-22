@@ -40,7 +40,7 @@ import { ScrollView } from 'react-native-gesture-handler';
     
     await fetch(ipadress + 'users',{method: 'PATCH',body:jsonbody,headers: {'Content-Type': 'application/json'},})
       .then(response => response.json())
-      .then(response => alert("Gegevens opgeslagen"));
+      .then(response => alert("Gegevens opgeslagen voor het zien van de gegevens log opniuew in"));
   }
 
   render() {

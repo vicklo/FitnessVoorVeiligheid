@@ -4,8 +4,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { MaterialCommunityIcons,AntDesign  } from 'react-native-vector-icons';
-import {DefaultTheme, Provider as PaperProvider, TextInput, Button} from 'react-native-paper';
+import {DefaultTheme, Provider as PaperProvider, TextInput, Button, ActivityIndicator} from 'react-native-paper';
 import Image from 'react-native-scalable-image';
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 import Home from './components/Home';
 import Logboek from './components/logboek';
@@ -38,6 +40,15 @@ import { ScrollView } from 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
+const theme = {
+  ...DefaultTheme,
+  roundness: 2,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#291876',
+    accent: '#291876',
+  },
+};
 
 function consthome(){
   return(
@@ -77,19 +88,6 @@ function constschemas(){
 
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function constdocenthome(){
   return(
@@ -167,7 +165,8 @@ export default class profile extends Component {
       student:true,
       register:true,
 
-
+      klassen:null,
+      selectedklas:null,
       username:"",
       studentmail:"",
       pass:"",
@@ -182,7 +181,7 @@ export default class profile extends Component {
   
   componentDidMount =  async() => 
   { 
-    globalThis.ipadress = "http://192.168.2.24:3000/";
+    globalThis.ipadress = "http://192.168.2.17:3000/users";
     globalThis.loggedinuser = null;
     await fetch(ipadress + 'users')
       .then(response => response.json())
@@ -191,6 +190,10 @@ export default class profile extends Component {
       .then(response => response.json())
       .then(dbusers => this.setState({docenten:dbusers}))
       console.log(this.state.docenten);
+    globalThis.app = this;
+    await fetch(ipadress + "klassencombo")
+      .then(response => response.json())
+      .then(dbklassen => this.setState({klassen:dbklassen}));
   }
   register =  async() => 
   { 
@@ -218,8 +221,9 @@ export default class profile extends Component {
 
   }
 
-  Login = () =>
+  Login = async() =>
   {
+    await this.componentDidMount();
     if(this.state.loginname != null && this.state.loginpass != null && this.state.users != null)
     {
       let log = false;
@@ -231,6 +235,7 @@ export default class profile extends Component {
           this.setState({user:element});
           
           loggedinuser = element;
+          console.log(element);
           return element;
         }
       });
@@ -269,7 +274,12 @@ export default class profile extends Component {
     }
 
   }
-
+  uitloggen = () =>
+  {
+    loggedinuser = null;
+    this.setState({user:null})
+    this.setState({loggedin:false});
+  }
 
 
   render(){
@@ -288,7 +298,7 @@ export default class profile extends Component {
                   <Text style={styles.LoginText}>Student naam</Text>
                   <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginname:text})}></TextInput>
                   <Text style={styles.LoginText}>Wachtwoord</Text>
-                  <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginpass:text})}></TextInput>
+                  <TextInput style={styles.LoginInput} secureTextEntry={true} onChangeText={text => this.setState({loginpass:text})}></TextInput>
                   <Button onPress={this.Login} style={styles.LoginButton}><Text style={{color:"white",fontSize:20}}>Login</Text></Button>
                   <Button onPress={() => this.setState({register:false})} style={styles.register}><Text style={{fontSize:20}}>Registreren</Text></Button>
                 </View>
@@ -325,9 +335,25 @@ export default class profile extends Component {
                         <TextInput onChangeText={text => this.setState({gewicht:text.replace(",",".")})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
                     </View>
                     <View style={{flexDirection:"row",margin:10}}>
-                    <Text style={{width:100}}>Fetpercentage:</Text>
+                      <Text style={{width:100}}>Fetpercentage:</Text>
                         <TextInput onChangeText={text => this.setState({fetpercentage:text.replace(",",".")})} style={{height:20,width:150,backgroundColor:"none"}}></TextInput>
                     </View>
+                    <View style={{flexDirection:"row",margin:10}}>
+                    <Text style={{width:100}}>Klas:</Text>
+
+                    {!this.state.klassen
+                    ?
+                    <ActivityIndicator></ActivityIndicator>
+                    :
+                    <DropDownPicker
+                      style={{width:150}}
+                      items={this.state.klassen}
+                      defaultIndex={0}
+                      containerStyle={{height: 40}}
+                      onChangeItem={item => this.setState({oefid:item.value})}
+                    />
+                    }
+                  </View>
                     <Button onPress={this.register} style={styles.LoginButton}><Text style={{color:"white",alignSelf:"center"}}>Registreren</Text></Button>
                   </ScrollView>
                 </View>
@@ -340,7 +366,7 @@ export default class profile extends Component {
               <Text style={styles.LoginText}>Docent naam</Text>
               <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginname:text})}></TextInput>
               <Text style={styles.LoginText}>Wachtwoord</Text>
-              <TextInput style={styles.LoginInput} onChangeText={text => this.setState({loginpass:text})}></TextInput>
+              <TextInput style={styles.LoginInput} secureTextEntry={true} onChangeText={text => this.setState({loginpass:text})}></TextInput>
               <Button onPress={this.Logindocent} style={styles.LoginButton}><Text style={{color:"white",fontSize:20}}>Login</Text></Button>
             </View>
           
@@ -355,11 +381,10 @@ export default class profile extends Component {
     
     return(
 
-      <PaperProvider theme={DefaultTheme}>
+      <PaperProvider theme={theme}>
           {this.state.student ?
-            <NavigationContainer theme={DefaultTheme}>
-              <Tab.Navigator
-                >
+            <NavigationContainer theme={theme}>
+              <Tab.Navigator options={{inactiveBackgroundColor:"black"}}>
                 <Tab.Screen name="Home" component={consthome}  
                   options={{
                     tabBarLabel: 'Home',
@@ -385,7 +410,7 @@ export default class profile extends Component {
                     ),
                   }}
                 />
-                <Tab.Screen name="Profiel" component={constprofiel} 
+                <Tab.Screen name="Profiel" component={constprofiel}
                   options={{
                     tabBarLabel: 'Profiel',
                     tabBarIcon: ({ color, size }) => (
@@ -396,7 +421,7 @@ export default class profile extends Component {
               </Tab.Navigator>
             </NavigationContainer>
             :
-            <NavigationContainer theme={DefaultTheme}>
+            <NavigationContainer theme={theme}>
             <Tab.Navigator
               >
               <Tab.Screen name="Home" component={constdocenthome}  
@@ -411,7 +436,7 @@ export default class profile extends Component {
                 options={{
                   tabBarLabel: 'Schemas',
                   tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="home" color={color} size={size} />
+                    <MaterialCommunityIcons name="format-list-bulleted" color={color} size={size} />
                   ),
                 }}
               />
@@ -419,7 +444,7 @@ export default class profile extends Component {
                 options={{
                   tabBarLabel: 'Oefeningen',
                   tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="home" color={color} size={size} />
+                    <MaterialCommunityIcons name="dumbbell" color={color} size={size} />
                   ),
                 }}
               />
@@ -427,7 +452,7 @@ export default class profile extends Component {
                 options={{
                   tabBarLabel: 'Leerlingen',
                   tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="home" color={color} size={size} />
+                    <MaterialCommunityIcons name="account-multiple" color={color} size={size} />
                   ),
                 }}
               />
@@ -435,7 +460,7 @@ export default class profile extends Component {
                 options={{
                   tabBarLabel: 'Profiel',
                   tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="home" color={color} size={size} />
+                    <MaterialCommunityIcons name="account" color={color} size={size} />
                   ),
                 }}
               />
@@ -472,7 +497,7 @@ const styles = StyleSheet.create({
     width:150,
     borderRadius:10,
     backgroundColor:"#291876",
-    marginTop:10,
+    marginTop:60,
     alignContent:"center"
   },
   register:{

@@ -24,7 +24,7 @@ import { ScrollView } from 'react-native-gesture-handler';
   }
 
 render() {
-  if(this.state.messages == null)
+  if(this.state.messages)
   return (
 <ScrollView>      
     <ActivityIndicator>
@@ -36,12 +36,6 @@ render() {
 else
     return(
       <View style={{flex: 1,alignItems: 'center',justifyContent: 'center'}}>
-          {this.state.messages
-          ?
-            <View >
-              <Text>Er zijn geen berichten gevonden</Text>
-            </View>
-              :
               <FlatList refreshing={this.state.refreshing} onRefresh={this.componentDidMount}
               data={this.state.messages}
               renderItem={({ item }) => (
@@ -56,9 +50,6 @@ else
             )}
             keyExtractor={item => item.id}
           />
-      
-
-          }
       </View>
 
     );

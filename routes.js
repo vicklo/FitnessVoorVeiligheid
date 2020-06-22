@@ -55,12 +55,12 @@ app.post('/users', function (req, res) {
   });
 });
 });
-app.get('/klassenstudents/:id', function (req, res) {
+app.get('/klassenstudents/:username/:wachtwoord', function (req, res) {
   // Connecting to the database.
   connection.getConnection(function (err, connection) {
 
   // Executing the MySQL query (select all data from the 'users' table).
-  connection.query('SELECT * FROM userstudens where klasid = ' + req.params.id, function (error, results, fields) {
+  connection.query('SELECT * FROM userstudens where klasid = ' + req.params.username, function (error, results, fields) {
     // If some error occurs, we throw an error.
     if (error) throw error;
 
@@ -440,12 +440,24 @@ app.post('/aandachtpunten', function (req, res) {
   });
 });
 });
+app.get('/klassencombo', function (req, res) {
+  let params = req.body;
+  // Connecting to the database.
+  connection.getConnection(function (err, connection) {
+
+  // Executing the MySQL query (select all data from the 'users' table).
+  connection.query("SELECT klassen.klasid as value,klassen.klasnaam as label from klassen ", function (error, results, fields) {
+    // If some error occurs, we throw an error.
+    if (error) throw error;
+
+    // Getting the 'response' from the database and sending it to our route. This is were the data is.
+    res.send(results)
+  });
+});
+});
 
 
 // Starting our server.
 app.listen(3000, () => {
   console.log('Go to http://localhost:3000/users so you can see the data.');
  });
-
-
-

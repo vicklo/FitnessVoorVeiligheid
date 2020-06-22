@@ -67,6 +67,5 @@ const styles = StyleSheet.create({
       elevation: 10,
       backgroundColor:"lightgray",
       padding :10,
-      flexDirection:"row"
     }
 })

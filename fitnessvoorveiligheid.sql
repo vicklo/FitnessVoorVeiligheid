@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Gegenereerd op: 17 jun 2020 om 11:23
+-- Gegenereerd op: 22 jun 2020 om 12:00
 -- Serverversie: 5.7.21
 -- PHP-versie: 5.6.35
 
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `aandachtpunten` (
   `oefeningid` int(10) NOT NULL,
   `aandachtspunt` varchar(1000) NOT NULL,
   PRIMARY KEY (`aandachtpuntid`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `aandachtpunten`
@@ -44,7 +44,8 @@ INSERT INTO `aandachtpunten` (`aandachtpuntid`, `oefeningid`, `aandachtspunt`) V
 (1, 1, 'voeten heupbreedte'),
 (2, 1, 'benen dieper dan 90 graden'),
 (3, 1, 'uitstrekken zonder de benen te overstrekken'),
-(5, 2, 'horizontale handvatten bosrthoogte');
+(9, 7, 'rug recht'),
+(8, 2, 'benen recht houden');
 
 -- --------------------------------------------------------
 
@@ -58,6 +59,11 @@ CREATE TABLE IF NOT EXISTS `docent` (
   `username` varchar(100) NOT NULL,
   `wachtwoord` varchar(100) NOT NULL,
   `klasid` int(10) NOT NULL,
+  `docent` tinyint(1) NOT NULL,
+  `docentmail` varchar(10000) NOT NULL,
+  `voornaam` varchar(1000) NOT NULL,
+  `achternaam` varchar(1000) NOT NULL,
+  `foto` varchar(10000) DEFAULT 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png',
   PRIMARY KEY (`userid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
@@ -65,9 +71,30 @@ CREATE TABLE IF NOT EXISTS `docent` (
 -- Gegevens worden geëxporteerd voor tabel `docent`
 --
 
-INSERT INTO `docent` (`userid`, `username`, `wachtwoord`, `klasid`) VALUES
-(1, 'Erik', 'wacht', 1),
-(2, 'Anouk', 'W8', 2);
+INSERT INTO `docent` (`userid`, `username`, `wachtwoord`, `klasid`, `docent`, `docentmail`, `voornaam`, `achternaam`, `foto`) VALUES
+(1, 'Erik', 'wacht', 1, 1, 'erik@summacollege.nl', 'erik', 'kelder', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png'),
+(2, 'Anouk', 'W8', 2, 1, 'anouk@summacollege.nl', 'anouk', 'mallens', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png');
+
+-- --------------------------------------------------------
+
+--
+-- Tabelstructuur voor tabel `docentberichten`
+--
+
+DROP TABLE IF EXISTS `docentberichten`;
+CREATE TABLE IF NOT EXISTS `docentberichten` (
+  `berichtid` int(11) NOT NULL AUTO_INCREMENT,
+  `datum` date NOT NULL,
+  `bericht` varchar(10000) NOT NULL,
+  PRIMARY KEY (`berichtid`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `docentberichten`
+--
+
+INSERT INTO `docentberichten` (`berichtid`, `datum`, `bericht`) VALUES
+(1, '2020-06-18', 'in verband met corona moet iedereen mondkapjes dragen op school.');
 
 -- --------------------------------------------------------
 
@@ -104,7 +131,7 @@ CREATE TABLE IF NOT EXISTS `klassen` (
   `klasnaam` varchar(1000) NOT NULL,
   `docentid` int(100) NOT NULL,
   PRIMARY KEY (`klasid`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `klassen`
@@ -113,9 +140,7 @@ CREATE TABLE IF NOT EXISTS `klassen` (
 INSERT INTO `klassen` (`klasid`, `klasnaam`, `docentid`) VALUES
 (1, 'AO2D', 1),
 (2, 'Ao3d', 2),
-(3, 'Fhh', 1),
-(4, 'Je moeder', 1),
-(5, 'Aod69', 1);
+(6, 'Ao3d', 1);
 
 -- --------------------------------------------------------
 
@@ -132,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `logboek` (
   `commentaar` varchar(1000) NOT NULL,
   `oefeningid` int(100) NOT NULL,
   PRIMARY KEY (`logboekid`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `logboek`
@@ -140,16 +165,9 @@ CREATE TABLE IF NOT EXISTS `logboek` (
 
 INSERT INTO `logboek` (`logboekid`, `studentid`, `datum`, `log`, `commentaar`, `oefeningid`) VALUES
 (1, 1, '2020-06-09', 'ik heb vandaag 20 oefeninf gedaan en heb zieke protiene shakes in me nek geduwd', '', 1),
-(2, 1, '2020-06-11', 'hallo', '', 1),
-(3, 1, '2020-06-11', 'hallo daar', '', 1),
-(4, 1, '2020-06-11', 'Hallo en welkom bij mijn nieuwe log', '', 1),
 (5, 1, '2020-06-11', 'Hallo mijn naam is victor en ik hebbvandaag 20 oefeningen gedaan en bem hier zeer trots op', '', 1),
-(6, 1, '2020-06-11', 'Hallo daar', '', 1),
-(7, 6, '2020-06-12', 'Dit is mijn eerste log', '', 1),
-(8, 6, '2020-06-12', 'Dit is mijn tweede vlog', '', 1),
-(9, 6, '2020-06-12', 'Dikke log', '', 1),
-(10, 6, '2020-06-12', 'Dit is mijn nieuwe vlog', '', 1),
-(11, 6, '2020-06-13', 'Nieuwe log', '', 1);
+(12, 6, '2020-06-18', 'Je kunt nu een schema volgen', '', 1),
+(23, 21, '2020-06-22', 'Schema 1 kompleet', '', 1);
 
 -- --------------------------------------------------------
 
@@ -164,14 +182,15 @@ CREATE TABLE IF NOT EXISTS `messages` (
   `message` varchar(1000) NOT NULL,
   `klasid` int(10) NOT NULL,
   PRIMARY KEY (`messageid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `messages`
 --
 
 INSERT INTO `messages` (`messageid`, `datum`, `message`, `klasid`) VALUES
-(1, '2020-06-11', 'de les valt uit vandaag', 1);
+(1, '2020-06-11', 'de les valt uit vandaag', 1),
+(2, '2020-06-18', 'Iedereen moet verplicht mond kapjes dragen in het school gebouw', 2);
 
 -- --------------------------------------------------------
 
@@ -186,7 +205,7 @@ CREATE TABLE IF NOT EXISTS `oefeningen` (
   `oefeningvideo` varchar(10000) NOT NULL,
   `docentid` int(100) NOT NULL,
   PRIMARY KEY (`oefeningid`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `oefeningen`
@@ -195,8 +214,7 @@ CREATE TABLE IF NOT EXISTS `oefeningen` (
 INSERT INTO `oefeningen` (`oefeningid`, `oefeningnaam`, `oefeningvideo`, `docentid`) VALUES
 (1, 'bankdruk', 'https://www.youtube.com/watch?v=RB35pp2tYcw', 1),
 (2, 'leg press', 'https://www.youtube.com/watch?v=GvRgijoJ2xY', 1),
-(3, 'abc', 'youtube.com', 1),
-(4, 'Vicklo', 'Ewa drerrie', 1);
+(7, 'Opdrukken', '', 1);
 
 -- --------------------------------------------------------
 
@@ -212,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `schemaoefeningen` (
   `hethaling` int(10) NOT NULL,
   `schemaid` int(10) NOT NULL,
   PRIMARY KEY (`schemaoefeningid`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=18 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `schemaoefeningen`
@@ -220,7 +238,17 @@ CREATE TABLE IF NOT EXISTS `schemaoefeningen` (
 
 INSERT INTO `schemaoefeningen` (`schemaoefeningid`, `oefeningid`, `sets`, `hethaling`, `schemaid`) VALUES
 (1, 1, 3, 10, 1),
-(2, 2, 3, 10, 1);
+(2, 2, 3, 10, 1),
+(3, 3, 3, 10, 1),
+(4, 3, 3, 10, 1),
+(5, 2, 12, 12, 1),
+(16, 2, 3, 10, 1),
+(9, 4, 5, 10, 1),
+(10, 1, 5, 10, 1),
+(17, 7, 5, 10, 1),
+(15, 1, 6, 13, 1),
+(13, 2, 5, 4, 1),
+(14, 2, 5, 4, 1);
 
 -- --------------------------------------------------------
 
@@ -234,14 +262,16 @@ CREATE TABLE IF NOT EXISTS `schemasumma` (
   `doelid` int(10) NOT NULL,
   `schemanaam` varchar(100) NOT NULL,
   PRIMARY KEY (`schemaid`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `schemasumma`
 --
 
 INSERT INTO `schemasumma` (`schemaid`, `doelid`, `schemanaam`) VALUES
-(1, 2, 'mijn eerste schema');
+(1, 2, 'mijn eerste schema'),
+(2, 1, 'mijn tweede schema'),
+(8, 3, 'mennos schema');
 
 -- --------------------------------------------------------
 
@@ -262,18 +292,27 @@ CREATE TABLE IF NOT EXISTS `userstudens` (
   `voornaam` varchar(100) NOT NULL,
   `achternaam` varchar(100) NOT NULL,
   `foto` varchar(1000) DEFAULT NULL,
+  `schemaid` int(11) DEFAULT NULL,
+  `docent` tinyint(1) NOT NULL,
   PRIMARY KEY (`userid`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `userstudens`
 --
 
-INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`) VALUES
-(1, 'vicklo', 'vic.kloeppel@gmail.com', 'Pass', 1, '2.00', '70.00', '19.00', 'Victor', 'Kloeppel', 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'),
-(6, 'vicitor', 'jsbcjb@gmail.com', 'w8', 2, '1.60', '69.00', '15.00', 'victor', 'kloeppel', 'https://i2.wp.com/stralendsolliciteren.nl/wp-content/uploads/2018/03/cv-profielfoto.jpg?resize=720%2C675&ssl=1'),
-(7, 'deenigeechte', 'mail', 'w8', 2, '1.79', '69.00', '15.00', 'victor', 'kloeppel', 'https://i2.wp.com/stralendsolliciteren.nl/wp-content/uploads/2018/03/cv-profielfoto.jpg?resize=720%2C675&ssl=1'),
-(8, 'viccie', 'vic.kloeppel@gmail.com', 'w8', 1, '1.79', '69.00', '12.00', 'victor', 'kloeppel', 'https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80');
+INSERT INTO `userstudens` (`userid`, `username`, `studentmail`, `wachtwoord`, `klasid`, `lengte`, `gewicht`, `fetpercentage`, `voornaam`, `achternaam`, `foto`, `schemaid`, `docent`) VALUES
+(1, 'vicklo', 'vic.kloeppel@gmail.com', 'Pass', 1, '2.00', '70.00', '19.00', 'Victor', 'Kloeppel', 'https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', NULL, 0),
+(6, 'vicitor', 'jsbcjb@gmail.com', 'w8', 2, '1.60', '69.00', '15.00', 'victor', 'kloeppel', 'https://i2.wp.com/stralendsolliciteren.nl/wp-content/uploads/2018/03/cv-profielfoto.jpg?resize=720%2C675&ssl=1', 2, 0),
+(7, 'deenigeechte', 'mail', 'w8', 2, '1.79', '69.00', '15.00', 'victor', 'kloeppel', 'https://i2.wp.com/stralendsolliciteren.nl/wp-content/uploads/2018/03/cv-profielfoto.jpg?resize=720%2C675&ssl=1', NULL, 0),
+(8, 'viccie', 'vic.kloeppel@gmail.com', 'w8', 1, '2.20', '69.00', '12.00', 'victor', 'kloeppel', 'https://images.unsplash.com/photo-1518806118471-f28b20a1d79d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80', 1, 0),
+(9, 'vicklo', 'vic.kloeppel@gmail.com', 'wachtwoord', 1, '1.80', '80.00', '15.00', 'victor', 'kloeppel', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png', NULL, 0),
+(10, 'vicklo91', 'vic.kloeppel@gmail.com', 'wachtwoord', NULL, '1.80', '80.00', '15.00', 'victor ', 'kloeppel', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png', NULL, 0),
+(11, 'vicklo91', 'vic.kloeppel@gmail.com', 'wachtwoord', NULL, '1.80', '80.00', '15.00', 'victor ', 'kloeppel', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png', NULL, 0),
+(12, 'Friso', 'Friso@gmail.com', 'Friso', NULL, '1.80', '69.80', '20.00', 'Friso', 'Kloeppel', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png', NULL, 0),
+(15, 'Vic', 'Vic', 'Vic', 1, '1.20', '69.00', '9.60', 'Vic', 'Vic', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png', 1, 0),
+(13, 'Victorkloeppel', 'Vic.kloeppel@gmail.com', 'Vicklo', NULL, '1.70', '1.70', '17.80', 'Victor', 'Kloeppel', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png', NULL, 0),
+(21, 'Wawoe', 'Wawoe@gmail.com', 'Wawoe123', NULL, '1.82', '80.00', '3.00', 'French', 'Wawoe', 'https://assets.zoom.nl/thumbnails/500x500/5/7/5788343c7c2d3728eb9db8f096b62081.png', NULL, 0);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

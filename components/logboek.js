@@ -28,6 +28,7 @@ import { ScrollView } from 'react-native-gesture-handler';
       .then(response => response.json())
       .then(logs => this.setState({logboek:logs}));
       this.setState({refreshing:false});
+      alert(this.state.logboek)
   }
   render() {
       if(this.state.logboek == null)
@@ -39,17 +40,11 @@ import { ScrollView } from 'react-native-gesture-handler';
     </ScrollView>
     
     );
+
     else
         return(
-          <View style={{flex: 1,alignItems: 'center',justifyContent: 'center'}}>
-              {this.state.logboek
-              ?
-              <View >
-              <Text>Er zijn geen logs gevonden</Text>
-              </View>
-
-              :
-              <FlatList refreshing={this.state.refreshing} onRefresh={this.refresh}
+          <View>
+              <FlatList style={{height:Dimensions.get('window').height}} refreshing={this.state.refreshing} onRefresh={this.refresh}
               data={this.state.logboek}
               renderItem={({ item }) => (
                 <View style={styles.container}>
@@ -71,7 +66,7 @@ import { ScrollView } from 'react-native-gesture-handler';
           />
   
 
-              }
+              
           </View>
 
         );

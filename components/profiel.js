@@ -26,9 +26,7 @@ import ImgToBase64 from 'react-native-image-base64';
       this.state.klassen.forEach(element => {
         if(element.klasid == loggedinuser.klasid)
             this.setState({klas: element.klasnaam})
-      });
-
-      
+      });   
   }
   
 
@@ -60,7 +58,7 @@ import ImgToBase64 from 'react-native-image-base64';
                       <Text style={{color:"white",fontSize:30}}>{loggedinuser.gewicht}Kg</Text>
                   </View>
                   <View style={{alignItems:"center",margin:15,width:100}}>
-                    <Text style={{color:"white",fontSize:15}}>fetpercentage</Text>
+                    <Text style={{color:"white",fontSize:15}}>Vetpercentage</Text>
                     <Text style={{color:"white",fontSize:30}}>{loggedinuser.fetpercentage}%</Text> 
                   </View>
                 </View>
@@ -98,7 +96,7 @@ import ImgToBase64 from 'react-native-image-base64';
                 <Button onPress={() =>  this.props.navigation.navigate('wijzigprofiel', { klas: this.state.klas })} style={{padding:5,margin:15,width:200,backgroundColor:"#291876",borderRadius:10,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}>
                     <Text style={{color:"white"}}>wijzig</Text>
                 </Button> 
-                <Button onPress={() => NativeModules.DevSettings.reload()} style={{padding:5,margin:15,width:200,backgroundColor:"#291876",borderRadius:10,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}>
+                <Button onPress={() => app.uitloggen()} style={{padding:5,margin:15,width:200,backgroundColor:"#291876",borderRadius:10,shadowColor:"#000",shadowOffset:{width:0,height:2},shadowOpacity:0.4}}>
                     <Text style={{color:"white"}}>Log uit</Text>
                 </Button>
               </View>
